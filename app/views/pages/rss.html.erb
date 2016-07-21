@@ -1,0 +1,28 @@
+<h1>RSS analize</h1>
+
+
+
+
+ 
+<% @source.rss.each do |a| %>
+   <% url=a.ref %>
+   <% feed = Feedjira::Feed.fetch_and_parse url %>
+   <center><b><%=  a.name %></br>
+   <%=  a.ref %></center></b></br>
+   <%=  feed.entries.first.to_a %></br>
+   <%#= feed.entries.first.author  unless feed.entries.first.author.blank? %>
+   <!-- <%#= feed.entries.first.category if !feed.entries.first.category.blank? %> --></br>
+   <%#= feed.entries.first.comments %></br>
+   <%#= feed.entries.first.summary %></br>
+   <%#= feed.entries.first.image %></br>
+   <%#= feed.entries.first.guid %></br>
+   <%#= feed.entries.first.url %></br>
+   <%#= feed.entries.first.published %></br>
+   <%#= feed.entries.first.source %></br>
+   <%#= feed.entries.first.title	%></br>
+ 
+<% end %> 
+
+
+
+<%= link_to 'Back', pages_path %>

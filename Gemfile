@@ -33,15 +33,45 @@ gem 'jbuilder', '~> 2.5'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'bullet'
+  gem 'annotate'
 end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console'
+  #gem 'web-console'
   gem 'listen', '~> 3.0.5'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'mailcatcher'
+  gem 'rspec-rails'
+
+ # gem 'factory_girl'
+  gem 'factory_girl_rails'
+  gem 'guard-rspec', '~> 4.6', '>= 4.6.4'
+  gem 'selenium-webdriver', '~> 2.53'
+  gem 'capybara', '~> 2.6', '>= 2.6.2'
+  # gem 'libnotify', '~> 0.9.1'
+  gem 'faker'
+  gem 'shoulda'
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner'
+  gem 'launchy'
+end
+
+group :test do
+  gem "fuubar"
+ # gem "capybara-webkit"
+  gem "database_cleaner"
+  gem "formulaic"
+  gem "launchy"
+  gem "shoulda-matchers"
+  gem "simplecov", require: false
+  gem "timecop"
+  gem "webmock"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -75,6 +105,7 @@ gem 'redis-rack-cache'
 gem 'ransack'
 gem 'yandex-translator'
 gem 'jquery-ui-rails'
-gem "paper_trail"
+#gem "paper_trail"
 gem 'momentjs-rails'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+gem 'haml-rails'

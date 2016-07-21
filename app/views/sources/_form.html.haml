@@ -1,0 +1,14 @@
+= simple_form_for(@source) do |f|
+  = f.error_notification
+  %form{:role => "form"}
+    .form-group
+      %label{:for => "name"} Source name:
+      = f.text_field :name, autofocus: true, class: 'form-control'
+    .form-group
+      %label{:for => "name"} Ref:
+      = f.text_field :ref, autofocus: true, class: 'form-control'
+    .form-group
+      = f.label :avatar, class: 'col-sm-2 control-label'
+      = f.file_field :avatar
+    .form-actions
+      = f.button :submit

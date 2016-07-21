@@ -1,56 +1,36 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+ 
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  devise_for :users
+ # devise_for :users
+  resources :tagoverlaps
+  resources :tagexcepts
+  resources :sources do
+    resources :infos
+  end  
+  resources :pages
+  resources :sourcehtmls
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  root 'pages#index'
+  get 'loadnews', to: 'pages#load'
+  get 'analyze', to: 'pages#analyze'
+  get 'category/:category', to: 'pages#index', as: :category
+  get 'data', to: 'pages#index', as: :data
+  get 'atags', to: 'pages#atags'
+  get 'tag_cloud', to: 'pages#tag_cloud'
+  get 'tags/:tag', to: 'pages#index', as: :tag
+  # get 'data/:data', to: 'pages#index', as: :data
+  get 'info', to: 'pages#info'
+  get 'remove_tags', to: 'pages#rtags'
+  get 'tagexport', to:   'pages#tagexport'
+  get 'tagimport', to:   'pages#tagimport'
+  get 'search_tags', to: 'pages#search_tags'
+  post 'search_tags', to: 'pages#index'
+  get 'redis', to: 'pages#redis'
+  get 'rss', to: 'pages#rss'
+  get 'infoday', to: 'pages#infoday'
+  get 'infoday1', to: 'pages#infoday1'
+  get 'infotoday', to: 'pages#infotoday'
+  get 'html', to: 'sourcehtmls#html'
+  get 'tmp', to: 'pages#tmp'
 end

@@ -1,0 +1,18 @@
+%p#notice= notice
+%h1 Listing Sources
+%table
+  %thead
+    %tr
+      %th{:colspan => "3"}
+  %tbody
+    - @sources.each do |sourcehtml|
+      %tr
+ 
+        %td= sourcehtml.name
+        %td= sourcehtml.ref
+        %td= link_to 'New', new_sourcehtml_path
+        %td= link_to 'Show', sourcehtml
+        %td= link_to 'Edit', edit_sourcehtml_path(sourcehtml)
+        %td= link_to 'Destroy', sourcehtml, method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+%p Для создания нового источника-меню источники

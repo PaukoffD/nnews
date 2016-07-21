@@ -1,0 +1,103 @@
+<p id="notice"><%= notice %></p>
+
+
+<table class="table">
+  <thead>
+    <tr>
+	  <th width="15%"> </th>
+	  <th width="85%"> </th>
+     </tr>
+  </thead>
+
+  
+  
+  
+  <tbody>
+  
+     <tr>
+	  <td>
+<h4>Категориии</h4>
+<% @categories.each do |cat| %>
+	 
+	<h6><%= link_to cat.name, cat %></h6>
+<% end %>
+</td>	 
+ <td>
+
+		
+
+<table class="table table-striped  table-condensed">
+
+ <thead>
+  <tr>
+    <th width="2%"></th>
+    <th width="48%"></th>
+    <th width="2%"></th>
+    <th width="48%"><center></center></th>
+   
+   </tr>
+  </thead>
+  
+
+
+   <center><%= Time.now() %></center>
+   <hr>
+    <% @pages.includes(:source).each_slice(2) do |a, b| %>
+ 	
+    <tr>
+     
+	
+	
+	
+	 
+	 <td><h6><%= a.time.to_time().strftime("%R") %></h6>
+	  
+	 </td>
+	
+	  
+	 <td> 
+      <details>
+       <summary><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar', :size => "20") %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %> </h6></div></summary>
+        <%= a.summary %>
+       </details> 
+
+	  
+	  </td>
+	  
+	  
+	  
+  <% if b!=nil%>	
+	 
+	
+	  
+	<td> <h6><%= b.time.to_time().strftime("%R") %></h6></td>
+	
+	  
+	  
+	  <td>
+	 
+	 
+       <details>
+       <summary><%= image_tag(b.source.avatar.url(:thumb), class: 'avatar', :size => "20") %> <%=  link_to b.title, nil, 'href' => b.ref , :target => "_blank" , title: b.summary %> </h6></div></summary>
+        <%= b.summary %>
+       </details> 
+	  </td>
+	  
+	
+	  
+	 <% end %>  
+	 </tr>
+	
+    <% end %>
+   
+ 
+  
+</table>
+      </tr>
+  </tbody>
+</table>	 
+
+<%= paginate(@pages) %>
+
+
+

@@ -1,0 +1,8 @@
+<div id="tag_cloud">
+  <% tag_cloud Page.tag_counts.order('taggings_count DESC').page(params[:page]), %w[s m l] do |tag, css_class| %>
+    <%= link_to tag.name, tag_path(tag.name), class: css_class %>  <%= tag.taggings_count %>
+  <% end %>
+</div>
+
+<%= paginate(Page.tag_counts.order('taggings_count DESC').page(params[:page])) %>
+ 

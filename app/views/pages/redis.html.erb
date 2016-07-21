@@ -1,0 +1,93 @@
+<meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+<p id="notice"><%= notice %></p>
+
+
+
+
+		
+
+<table class="table table-striped  table-condensed">
+
+ <thead>
+  <tr>
+    <th width="2%"></th>
+    <th width="48%"></th>
+    <th width="2%"></th>
+    <th width="48%"><center></center></th>
+   
+   </tr>
+  </thead>
+ 
+ <% for i in 0..8 do %> 
+ <div class="btn-group">
+  
+   <button type="button" class="btn btn-info"><%= link_to (Date.today-i).strftime("%d-%m-%y"), data_path(data:(Date.today-i))  %></button>
+  
+    </div>
+ <% end %> 
+  <right>       <%= Time.zone.now().strftime("%T") %> </right>
+  
+  
+    <% @pages.each_slice(2) do |a, b| %>
+ 	
+    <tr>
+     
+	
+	
+	
+	 
+	 <td><h6><%= a["time"].to_time().strftime("%R") %></h6>
+	  
+	 </td>
+	
+	  
+	 <td> 
+	 <% if a["summary"].blank? %>
+	 <% a["summary"]= " " %>
+	 <% end %>
+     
+     <h6>  <%= image_tag(@source[@rel[a['source_id']]].avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to a["title"], nil, 'href' => a["ref"] , :target => "_blank" , title: a["summary"] %></h6></div>
+        <div class=inline><%= image_tag(a['image'], class: 'avatar', :size => "200") unless a['image'].blank? %> <%=markdown(a['summary']) %></div>
+     
+
+	  
+	  </td>
+	  
+	  
+	  
+  <% if b!=nil%>	
+	 
+	
+	  
+	<td> <h6><%= b["time"].to_time().in_time_zone("Moscow").strftime("%R") %></h6></td>
+	
+	  
+	  
+	  <td>
+	  <% if b["summary"].blank? %>
+	 <% b["summary"]= " " %>
+	 <% end %>
+	 
+      <h6>  <%= image_tag(@source[@rel[b['source_id']]].avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to b["title"], nil, 'href' => b["ref"] , :target => "_blank" , title: b["summary"] %></h6></div>
+        
+       <div class=inline><%= image_tag(b['image'], class: 'avatar', :size => "200") unless b['image'].blank? %> <%=markdown(b['summary']) %></div>
+      
+	  </td>
+	  
+	
+	  
+	 <% end %>  
+	 </tr>
+	
+    <% end %>
+   
+ 
+  
+
+  </tbody>
+</table>	 
+
+<%#= paginate(@pages) %>
+
+
+
