@@ -153,33 +153,41 @@ end
    url = s.ref
     feed = Feedjira::Feed.fetch_and_parse url
     feed.entries.each do |entry|
-      @p = Page.new
-      @p.title = entry.title
-      @p.ref = entry.url
-      @p.time = entry.published.to_datetime
-      @p.source_id = s.id
-      @p.image=entry.image if defined? entry.image
-      s2 = entry.categories[0] if defined? entry.category
-      cat1 = Category.find_by(name: s2) || Category.new
+      #loa
+      @p = Page.create(title: entry.title,
+                            time: entry.published.to_datetime,
+                            ref: entry.url,
+                            source_id: s.id,
+                            image: entry.image,
+                            summary: entry.summary
+                            )
+     #@p.title = entry.title
+      #@p.ref = entry.url
+      #@p.time = entry.published.to_datetime
+      #@p.source_id = s.id
+      #@p.image=entry.image if defined? entry.image
+     # s2 = entry.categories[0] if defined? entry.category
+      #cat1 = Category.find_by(name: s2) || Category.new
       #cat1.name="Без категории" if cat1.id==19
       #cat1.save
-      if cat1.blank?
-         c = Category.new
-         c.name = entry.categories[0]
-         c.name=="Без категории" if c.name==nil
-         c.save
-         cat1 = Category.last
-       end
-      @p.category_id = cat1.id
-      if entry.summary.blank?
-        entry.summary = ' '
-       else
-        @p.summary = entry.summary[0..400]
-       
-       end
+      #if cat1.blank?
+      #   c = Category.new
+     #    c.name = entry.categories[0]
+      #   c.name=="Без категории" if c.name==nil
+     #    c.save
+     #    cat1 = Category.last
+    #   end
+    #  @p.category_id = cat1.id
+   #   if entry.summary.blank?
+    #    entry.summary = ' '
+   #    else
+   #     @p.summary = entry.summary[0..400]
+   #    
+  #     end
       @p.save
       @p = Page.last
       ActsAsTaggableOn.delimiter = [' ', ',']
+      #loa
       @p.tag_list.add(@p.title, parse: true)
       @p.save
      
