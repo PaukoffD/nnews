@@ -61,7 +61,7 @@ class PagesController < ApplicationController
       end     
 
   def atags
-   @pages = Page.joins(:taggings).where('taggings.taggable_id' => nil)
+   @pages = Page.joins('LEFT OUTER JOIN "taggings" ON "taggings"."taggable_id" = "pages"."id"').where(taggings: {taggable_id: nil})
    loa
   end
 
