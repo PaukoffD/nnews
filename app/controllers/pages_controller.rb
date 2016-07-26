@@ -60,9 +60,14 @@ class PagesController < ApplicationController
        end   
       end     
 
-  def atags
+  def atags #add tags
    @pages = Page.joins('LEFT OUTER JOIN "taggings" ON "taggings"."taggable_id" = "pages"."id"').where(taggings: {taggable_id: nil})
-   loa
+   ActsAsTaggableOn.delimiter = [' ', ',']
+   @pages.each do |p|   
+     byebug
+      p.tag_list.add(p.title, parse: true)
+      p.save
+    end  
   end
 
   def rtags # remove tags

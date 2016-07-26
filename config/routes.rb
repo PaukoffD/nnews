@@ -33,4 +33,5 @@ Rails.application.routes.draw do
   get 'infotoday', to: 'pages#infotoday'
   get 'html', to: 'sourcehtmls#html'
   get 'tmp', to: 'pages#tmp'
+  get 'sourceexport', to:   'sources#sourceexport'
 end

@@ -16,6 +16,37 @@
 class SourcesController < ApplicationController
   before_action :set_source, only: [:show, :edit, :update, :destroy]
 
+
+def sourceexport
+    @sources = Source.all
+    f=File.new('sourcestags.txt', 'w+') 
+
+     @sources.each do |tt|
+      f << tt.name + ";"
+     end
+  end
+
+
+
+
+def sourceimport
+    #@tags = Tagecxept.new
+   #csv_text = File.read('tags1.txt')
+   csv = CSV.foreach('sources.txt', :headers => false)
+   csv.each do |row|
+   a=row.to_s.split(";")
+   a.each do |b|
+    tag = Tagexcept.new
+    if b.match("\\[")
+       tag.name=b[2,b.length-2]
+     elsif  !b.match('\\]')
+       tag.name=b
+     end
+    tag.save
+   end
+   end
+  end
+
   def index
     @sources = Source.all
   end
