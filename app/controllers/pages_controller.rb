@@ -65,10 +65,8 @@ class PagesController < ApplicationController
    @pages = Page.joins('LEFT OUTER JOIN "taggings" ON "taggings"."taggable_id" = "pages"."id"').where(taggings: {taggable_id: nil})
    ActsAsTaggableOn.delimiter = [' ']
    @pages.each do |p|   
-     # loabyebug
-      p.tag_list.add(p.title, parse: true)
-
-      p.save
+     p.tag_list.add(p.title, parse: true)
+     p.save
     end  
   end
 
