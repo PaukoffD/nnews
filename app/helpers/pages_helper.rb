@@ -151,7 +151,10 @@ end
    source = Source.all
    source.rss.each do |s|
    url = s.ref
-    feed = Feedjira::Feed.fetch_and_parse url
+    feed = Feedjira::Feed.fetch_and_parse(
+      url, :on_success => download_success,
+      :on_failure => download_failure
+    )
     feed.entries.each do |entry|
       #loa
       @p = Page.create(title: entry.title,
@@ -194,4 +197,22 @@ end
     end 
    end  
  end
+
+
+private
+
+ def download_failure
+    lambda { |curl, err|
+      logger.error "Downloading #{curl} failed due to #{error}"
+    }
+  end
+
+
+   def download_success
+     lambda { |url, feed|
+      feed.entries.each do |entry|
+        puts entry
+      end
+    }
+   end 
 end

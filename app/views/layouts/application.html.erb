@@ -15,7 +15,8 @@
    
 </head>
 <body>
-
+ <div class="container">
+    <%= render "nav" %>
 <% flash.each do |key, value| %>
     <div class="alert alert-<%= key %> alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -49,113 +50,7 @@
 
 
 
-<nav role="navigation" class="navbar navbar-default">
-  <!-- Brand and toggle get grouped for better mobile display -->
-  <div class="navbar-header">
-    <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <%= link_to "Новости", root_path, class: 'navbar-brand' %>
-  </div>
-  <!-- Collection of nav links, forms, and other content for toggling -->
-  <div id="navbarCollapse" class="collapse navbar-collapse">
-    <ul class="nav navbar-nav navbar-left">
-                <!-- <li><%= link_to " Категории", root_path %><span class="sr-only">(current)</span></a></li>-->
-                 
-				 <li class="right"><%= link_to 'Облако тэгов', tag_cloud_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'Инфо', info_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'Redis', redis_path %><span class="sr-only">(current)</span></a></li>
-		  </ul>
-      
-      <ul class="nav navbar-nav navbar-right">
-       <% if user_signed_in? %>
-        <ul class="nav navbar-nav">
-      
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Тулзы
-        <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-         <li class="right"><%= link_to 'инфодей', infoday_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'infoday1', infoday1_path %><span class="sr-only">(current)</span></a></li>
-         <li><%= link_to "infotoday", infotoday_path %><span class="sr-only">(current)</span></a></li> 
-         <li class="right"><%= link_to 'Тэги', tagexcepts_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'выгрузить в файл', tagexport_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'загрузить из файла', tagimport_path %><span class="sr-only">(current)</span></a></li>
-        </ul>
-      </li>
-      </ul>                 
 
-
-      <ul class="nav navbar-nav navbar-right">
-       
-        <ul class="nav navbar-nav">
-      
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Тэги
-        <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-         <li class="right"><%= link_to 'Удаление тэгов', remove_tags_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'Обьединение тэгов', tagoverlaps_path %><span class="sr-only">(current)</span></a></li>
-         <li><%= link_to "Загрузить тэги", atags_path %><span class="sr-only">(current)</span></a></li> 
-         <li class="right"><%= link_to 'Тэги', tagexcepts_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'выгрузить в файл', tagexport_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'загрузить из файла', tagimport_path %><span class="sr-only">(current)</span></a></li>
-        </ul>
-      </li>
-      </ul>                 
-
-<ul class="nav navbar-nav navbar-right">
-       
-        <ul class="nav navbar-nav">
-      
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown">Источники
-        <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-         <li class="right"><%= link_to 'Загрузить новости', loadnews_path %><span class="sr-only">(current)</span></a></li>
-          <li class="right"><%= link_to 'Источники', sources_path %><span class="sr-only">(current)</span></a></li>
-          <li class="right"><%= link_to 'Анализ RSS', rss_path %><span class="sr-only">(current)</span></a></li> 
-         <li class="right"><%= link_to 'Источник html', html_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'выгрузить в файл', sourceexport_path %><span class="sr-only">(current)</span></a></li>
-         <li class="right"><%= link_to 'tmp', tmp_path %><span class="sr-only">(current)</span></a></li>
-        </ul>
-      </li>
-      </ul>                 
-                        
-               
-                            <li><%= link_to current_user.email, edit_user_registration_path %></li>
-              
-               
-         
-        
-        
-
-         
-     
-     <li class="right"><%= link_to 'Поиск', search_tags_path %><span class="sr-only">(current)</span></a></li>
-        
-            
-              <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
-              
-                         <% else %>
-                             <li><%= link_to 'Login', new_user_session_path %></li>
-               
-                         <% end %>
-                    </ul>
-   
-     
-               
-            
-   
-             </div>
-            </div>
-        </nav>
-
-		
-		
 
           <div class="fluidcontainer">
               <%= yield %>

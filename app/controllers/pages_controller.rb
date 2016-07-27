@@ -22,6 +22,7 @@ class PagesController < ApplicationController
   require 'time'
   require 'csv'
 
+
   include PagesHelper
 
   def load
@@ -62,9 +63,9 @@ class PagesController < ApplicationController
 
   def atags #add tags
    @pages = Page.joins('LEFT OUTER JOIN "taggings" ON "taggings"."taggable_id" = "pages"."id"').where(taggings: {taggable_id: nil})
-   ActsAsTaggableOn.delimiter = [' ', ',']
+   #ActsAsTaggableOn.delimiter = [' ', ',']
    @pages.each do |p|   
-     byebug
+    # byebug
       p.tag_list.add(p.title, parse: true)
       p.save
     end  
@@ -350,6 +351,6 @@ loa
     # Never trust parameters from the scary internet, only allow the white list through.
   def page_params
     params.require(:page).permit!
-    params.require(:newslast).permit!
+    params.require(:page).permit(:title, :tag_list)
   end
 end
