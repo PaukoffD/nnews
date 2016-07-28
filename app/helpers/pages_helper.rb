@@ -151,9 +151,13 @@ end
    source = Source.all
    source.rss.each do |s|
    url = s.ref
+    @newest_entry = Page.order(time: :desc).where(source_id: s.id).first
     feed = Feedjira::Feed.fetch_and_parse url
+    
     feed.entries.each do |entry|
-      #loa
+     
+      next unless !@newest_entry || entry.published > @newest_entry.time
+#loa
       @p = Page.create(title: entry.title,
                             time: entry.published.to_datetime,
                             ref: entry.url,
@@ -184,9 +188,7 @@ end
    #     @p.summary = entry.summary[0..400]
    #    
   #     end
-      @p.save
-      @p = Page.last
-      ActsAsTaggableOn.delimiter = [' ', ',']
+       ActsAsTaggableOn.delimiter = [' ', ',']
       #loa
       @p.tag_list.add(@p.title, parse: true)
       @p.save

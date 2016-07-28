@@ -10,6 +10,26 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require jquery-ui/core
+ *= require jquery-ui/theme
+ *= require bootstrap
+ *= require bootstrap-datetimepicker
  *= require_tree .
  *= require_self
  */
+
+.avatar {
+   float: left;
+   padding: 0 20px 20px 0;
+}
+.avatar1 {
+   float: left;
+   size :  20;
+   
+}
+
+img {
+	float: left;
+	 max-width: 20%;
+    height: auto;
+}
