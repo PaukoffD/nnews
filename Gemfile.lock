@@ -45,6 +45,11 @@ GEM
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 12.0)
     arel (6.0.3)
+    ast (2.3.0)
+    axiom-types (0.1.1)
+      descendants_tracker (~> 0.0.4)
+      ice_nine (~> 0.11.0)
+      thread_safe (~> 0.3, >= 0.3.1)
     babosa (1.0.2)
     bcrypt (3.1.11)
     bcrypt (3.1.11-x86-mingw32)
@@ -75,7 +80,13 @@ GEM
       activesupport (>= 3.0)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
+    code_analyzer (0.4.5)
+      sexp_processor
+    codeclimate-engine-rb (0.3.1)
+      virtus (~> 1.0)
     coderay (1.1.1)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.2.x)
@@ -83,7 +94,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    colorize (0.8.1)
     concurrent-ruby (1.0.2)
+    connection_pool (2.2.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     cucumber (2.4.0)
@@ -106,6 +119,8 @@ GEM
     daemons (1.2.3)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
     devise (4.2.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -114,6 +129,7 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    equalizer (0.0.11)
     erubis (2.7.0)
     eventmachine (1.0.9.1)
     execjs (2.7.0)
@@ -135,6 +151,15 @@ GEM
       sax-machine (~> 1.0)
     ffi (1.9.10)
     ffi (1.9.10-x86-mingw32)
+    flay (2.8.0)
+      erubis (~> 2.7.0)
+      path_expander (~> 1.0)
+      ruby_parser (~> 3.0)
+      sexp_processor (~> 4.0)
+    flog (4.4.0)
+      path_expander (~> 1.0)
+      ruby_parser (~> 3.1, > 3.1.0)
+      sexp_processor (~> 4.4)
     font-awesome-rails (4.6.3.1)
       railties (>= 3.2, < 5.1)
     formatador (0.2.5)
@@ -182,6 +207,7 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    ice_nine (0.11.2)
     jbuilder (2.5.0)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -248,9 +274,13 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (~> 0.3.0)
+    parser (2.3.1.2)
+      ast (~> 2.2)
+    path_expander (1.0.0)
     pkg-config (1.1.7)
     polyamorous (1.3.0)
       activerecord (>= 3.0)
+    powerpack (0.1.1)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -301,11 +331,20 @@ GEM
       remotipart (~> 1.0)
       safe_yaml (~> 1.0)
       sass-rails (>= 4.0, < 6)
+    rails_best_practices (1.17.0)
+      activesupport
+      code_analyzer (>= 0.4.3)
+      erubis
+      i18n
+      json
+      require_all
+      ruby-progressbar
     railties (4.2.6)
       actionpack (= 4.2.6)
       activesupport (= 4.2.6)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    rainbow (2.1.0)
     rake (11.2.2)
     ransack (1.7.0)
       actionpack (>= 3.0)
@@ -339,7 +378,12 @@ GEM
       redis-store (~> 1.1.0)
     redis-store (1.1.7)
       redis (>= 2.2)
+    reek (4.1.0)
+      codeclimate-engine-rb (~> 0.3.1)
+      parser (~> 2.3.1, >= 2.3.1.2)
+      rainbow (~> 2.0)
     remotipart (1.2.1)
+    require_all (1.3.3)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
     rspec (3.4.0)
@@ -363,9 +407,24 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    rubocop (0.42.0)
+      parser (>= 2.3.1.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
     ruby_parser (3.8.1)
       sexp_processor (~> 4.1)
+    rubycritic (2.9.2)
+      colorize
+      flay (= 2.8.0)
+      flog (= 4.4.0)
+      launchy (= 2.4.3)
+      parser (= 2.3.1.2)
+      reek (= 4.1.0)
+      ruby_parser (~> 3.8)
+      virtus (~> 1.0)
     rubyzip (1.2.0)
     safe_yaml (1.0.4)
     sass (3.4.22)
@@ -388,6 +447,11 @@ GEM
     shoulda-context (1.2.1)
     shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
+    sidekiq (4.1.4)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      redis (~> 3.2, >= 3.2.1)
+      sinatra (>= 1.4.7)
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
@@ -403,6 +467,9 @@ GEM
     skinny (0.2.4)
       eventmachine (~> 1.0.0)
       thin (>= 1.5, < 1.7)
+    slim (3.0.7)
+      temple (~> 0.7.6)
+      tilt (>= 1.3.3, < 2.1)
     slop (3.6.0)
     spring (1.7.2)
     sprockets (3.6.3)
@@ -414,6 +481,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.3.11)
     sqlite3 (1.3.11-x86-mingw32)
+    temple (0.7.7)
     text (1.3.1)
     thin (1.5.1)
       daemons (>= 1.0.9)
@@ -423,6 +491,8 @@ GEM
     thread_safe (0.3.5)
     tilt (2.0.5)
     timecop (0.8.1)
+    traceroute (0.5.0)
+      rails (>= 3.0.0)
     truncate_html (0.9.3)
     turbolinks (5.0.0)
       turbolinks-source (~> 5)
@@ -433,7 +503,13 @@ GEM
       tzinfo (>= 1.0.0)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
+    unicode-display_width (1.1.0)
     uniform_notifier (1.10.0)
+    virtus (1.0.5)
+      axiom-types (~> 0.1)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
     warden (1.2.6)
       rack (>= 1.0)
     webmock (2.1.0)
@@ -493,6 +569,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 4.2.6)
   rails_admin
+  rails_best_practices
   ransack
   redcarpet
   redis
@@ -500,16 +577,22 @@ DEPENDENCIES
   redis-rack-cache
   redis-rails
   rspec-rails
+  rubocop
+  rubycritic
   sass-rails (~> 5.0)
   selenium-webdriver (~> 2.53)
   shoulda
   shoulda-matchers
+  sidekiq
   simple_form
   simplecov
+  sinatra
+  slim
   spring
   sqlite3
   text
   timecop
+  traceroute
   truncate_html
   turbolinks (~> 5)
   tzinfo-data

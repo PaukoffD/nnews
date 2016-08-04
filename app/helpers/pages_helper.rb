@@ -162,7 +162,6 @@ end
                             time: entry.published.to_datetime,
                             ref: entry.url,
                             source_id: s.id,
-                            image: entry.image,
                             summary: entry.summary
                             )
      #@p.title = entry.title
@@ -188,6 +187,7 @@ end
    #     @p.summary = entry.summary[0..400]
    #    
   #     end
+     @p.image=entry.image if defined? entry.image
        ActsAsTaggableOn.delimiter = [' ', ',']
       #loa
       @p.tag_list.add(@p.title, parse: true)

@@ -1,0 +1,5 @@
+<h4>Источники</h4>
+<% @sources.each do |ss| %>
+   
+  <h6><%= link_to ss.name, ss_path(ss.id) %>  </h6>
+<% end %>
