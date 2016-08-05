@@ -152,7 +152,13 @@ end
    source.rss.each do |s|
    url = s.ref
     @newest_entry = Page.order(time: :desc).where(source_id: s.id).first
+   begin
     feed = Feedjira::Feed.fetch_and_parse url
+    
+    
+    rescue Faraday::Error::ConnectionFailed => e
+      next
+     end   
     
     feed.entries.each do |entry|
      
@@ -187,6 +193,18 @@ end
    #     @p.summary = entry.summary[0..400]
    #    
   #     end
+      s2 = entry.categories[0] if defined? entry.category
+      cat1 = Category.find_by(name: s2)
+      #cat1.name="Без категории" if cat1.name=="19"
+      #cat1.save
+      if cat1.blank?
+         c = Category.new
+         c.name = entry.categories[0]
+         c.name=="Без категории" if c.name==nil
+         c.save
+         cat1 = Category.last
+       end
+      @p.category_id = cat1.id
      @p.image=entry.image if defined? entry.image
        ActsAsTaggableOn.delimiter = [' ', ',']
       #loa

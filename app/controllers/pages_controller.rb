@@ -28,9 +28,10 @@ class PagesController < ApplicationController
   def load
    load_rss
   end
-      def analyze
-    
-      end
+  
+  def analyze
+   
+  end
 
  def tmp
     #source = Source.all
