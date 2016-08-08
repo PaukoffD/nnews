@@ -216,20 +216,4 @@ end
  end
 
 
-private
-
- def download_failure
-    lambda { |curl, err|
-      logger.error "Downloading #{curl} failed due to #{error}"
-    }
-  end
-
-
-   def download_success
-     lambda { |url, feed|
-      feed.entries.each do |entry|
-        puts entry
-      end
-    }
-   end 
 end
