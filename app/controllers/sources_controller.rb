@@ -19,10 +19,10 @@ class SourcesController < ApplicationController
 
 def sourceexport
     @sources = Source.all
-    f=File.new('sourcestags.txt', 'w+') 
+    f=File.new('sources.txt', 'w+') 
 
      @sources.each do |tt|
-      f << tt.name + ";"
+      f << tt.name + ";"+ tt.ref+ ";"+tt.created_at.to_s+ ";"+tt.updated_at.to_s+ ";"+tt.avatar_file_name+ ";"+tt.avatar_content_type+ ";"+ tt.avatar_file_size.to_s+ ";"+ tt.avatar_updated_at.to_s+";"
      end
   end
 

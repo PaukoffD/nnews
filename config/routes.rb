@@ -36,4 +36,5 @@ Rails.application.routes.draw do
   get 'html', to: 'sourcehtmls#html'
   get 'tmp', to: 'pages#tmp'
   get 'sourceexport', to:   'sources#sourceexport'
+  get 'sourceimport', to:   'sources#sourceimport'
 end
