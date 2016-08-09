@@ -22,7 +22,8 @@ def sourceexport
     f=File.new('sources.txt', 'w+') 
 
      @sources.each do |tt|
-      f << tt.name + ";"+ tt.ref+ ";"+tt.created_at.to_s+ ";"+tt.updated_at.to_s+ ";"+tt.avatar_file_name+ ";"+tt.avatar_content_type+ ";"+ tt.avatar_file_size.to_s+ ";"+ tt.avatar_updated_at.to_s+";"
+      f << [tt.id.to_s,tt.name,tt.ref,tt.created_at.to_s,tt.updated_at.to_s,tt.avatar_file_name,tt.avatar_content_type,tt.avatar_file_size.to_s,tt.avatar_updated_at.to_s].join(';') <<"\n"
+     #oa
      end
   end
 
@@ -35,15 +36,17 @@ def sourceimport
    csv = CSV.foreach('sources.txt', :headers => false)
    csv.each do |row|
    a=row.to_s.split(";")
-   a.each do |b|
-    tag = Tagexcept.new
-    if b.match("\\[")
-       tag.name=b[2,b.length-2]
-     elsif  !b.match('\\]')
-       tag.name=b
-     end
-    tag.save
-   end
+   s1=a[0][2,a[0].length-2]
+   source=Source.find_by_id(s1)|| Source.new
+   source.name=a[1]
+   source.ref=a[2]
+   source.created_at=a[3].to_datetime
+   source.updated_at =a[4].to_datetime  
+   source.avatar_file_name=a[5]
+   source.avatar_content_type=a[6]
+   source.avatar_file_size=a[7].to_i
+   source.avatar_updated_at=a[8][0,a[8].length-2].to_datetime
+   source.save
    end
   end
 
