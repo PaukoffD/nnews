@@ -43,7 +43,7 @@ gem 'yaml_db'
 gem 'friendly_id'
 gem 'babosa'
 #gem 'rails-i18n'
-gem 'nokogiri'
+gem 'nokogiri', '~> 1.6.8.rc2'
 gem 'acts_as_tree'
 gem 'text'
 gem 'feedjira'
@@ -100,8 +100,7 @@ group :development do
   gem 'rails_best_practices', require: false
   #gem 'rb-inotify', github: 'kvokka/rb-inotify', require: false
   gem 'rubocop', require: false
-  gem 'rubycritic', require: false
-  gem 'spring'
+  #gem 'rubycritic', require: false
   gem 'traceroute'
 end
 

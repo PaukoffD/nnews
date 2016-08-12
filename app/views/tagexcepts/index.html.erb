@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Tagexcepts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th width="25%"></th>
+	  <th width="26%"></th>
+      <th width="25%"></th>
+	  <th width="25%"></th>
+	
+    </tr>
+  </thead>
+<div style="overflow:hidden;">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <div id="datetimepicker12"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker12').datetimepicker({
+                inline: true
+            });
+        });
+    </script>
+</div>
+  <tbody>
+    <% @tagexcepts.each_slice(4) do |a, b, c, d |  %>
+      <tr>
+        <td><%= a.id %>.  <b><%= a.name %></b> <%= link_to 'Show', a %>
+        <%= link_to 'Edit', edit_tagexcept_path(a) %>
+        <%= link_to 'Destroy', a, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		
+		<% if !b.blank? %>
+		 <td><%= b.id %>.  <b><%= b.name %></b> <%= link_to 'Show', b %>
+        <%= link_to 'Edit', edit_tagexcept_path(b) %>
+        <%= link_to 'Destroy', b, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% end %>
+		
+		
+		<% if !c.blank? %>
+		 <td><%= c.id %>.  <b><%= c.name %></b> <%= link_to 'Show', c %>
+        <%= link_to 'Edit', edit_tagexcept_path(c) %>
+        <%= link_to 'Destroy', c, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% end %>
+		
+		<% if !d.blank? %>
+		 <td><%= d.id %>.  <b><%= d.name %></b> <%= link_to 'Show', d %>
+        <%= link_to 'Edit', edit_tagexcept_path(d) %>
+        <%= link_to 'Destroy', d, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% end %>
+		
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Tagexcept', new_tagexcept_path %>

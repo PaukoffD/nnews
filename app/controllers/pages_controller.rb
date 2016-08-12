@@ -62,50 +62,9 @@ class PagesController < ApplicationController
        end   
       end     
 
-  def atags #add tags
-   @pages = Page.joins('LEFT OUTER JOIN "taggings" ON "taggings"."taggable_id" = "pages"."id"').where(taggings: {taggable_id: nil})
-   ActsAsTaggableOn.delimiter = [' ']
-   @pages.each do |p|   
-     p.tag_list.add(p.title, parse: true)
-     p.save
-    end  
-  end
-
-  def rtags # remove tags
-    tgs = Tagexcept.all
-   tgsovlp = Tagoverlap.all
-   tgs.each do |pt|
-      result = ActsAsTaggableOn::Tag.where(name: pt.name)
-    ActsAsTaggableOn::Tagging.where(tag_id: result).delete_all
-     ActsAsTaggableOn::Tag.where(name: pt.name).delete_all
-   end
-    tgsovlp.each do |pt1|
-        result = ActsAsTaggableOn::Tag.where(name: pt1.name)
-    result1 = ActsAsTaggableOn::Tag.where(name: pt1.nametarget)
-    # res=result.tagging_count+result1.tagging_count
-    
-     if !result.blank? && !result1.blank?
-      res = result[0]['taggings_count'] + result1[0]['taggings_count']
-      result[0]['taggings_count'] = res
-       ActsAsTaggableOn::Tagging.where(tag_id: result).update_all(tag_id: result[0]['id'])
-     
-      ActsAsTaggableOn::Tag.where(name: pt1.nametarget).update_all(taggings_count: res)
-      ActsAsTaggableOn::Tag.where(name: pt1.name).delete_all
-    
-    else
-    unless result.blank?
-     ActsAsTaggableOn::Tagging.where(tag_id: result).update_all(tag_id: result[0]['id'])
-     ActsAsTaggableOn::Tag.where(name: pt1.name).update_all(name: pt1.nametarget)
-    end
-    end
-  end
-    @cats=Category.all
-    @cats.each do |cat|
-      cat.count=Page.where(category_id: cat.id).count
-      cat.save
-   end
   
-  end
+
+ 
   
   def search_tags1
     render :search_tags
@@ -192,34 +151,9 @@ class PagesController < ApplicationController
   def edit
   end
 
-  def tagexport
-    @tags = ActsAsTaggableOn::Tag.all
-    #loa
-    f=File.new('tags.txt', 'w+') 
+  
 
-     @tags.each do |tt|
-      f << tt.name + ";"
-     # loa
-     end
-  end
-
-  def tagimport
-    #@tags = Tagecxept.new
-   #csv_text = File.read('tags1.txt')
-   csv = CSV.foreach('tags1.txt', :headers => false)
-   csv.each do |row|
-   a=row.to_s.split(";")
-   a.each do |b|
-    tag = Tagexcept.new
-    if b.match("\\[")
-       tag.name=b[2,b.length-2]
-     elsif  !b.match('\\]')
-       tag.name=b
-     end
-    tag.save
-   end
-   end
-  end
+  
 
   def create
     @page = Page.new(page_params)
