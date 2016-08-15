@@ -1,5 +1,5 @@
 <h4>Источники</h4>
 <% @sources.includes(:infos).each do |ss| %>
    
-  <h6><%= link_to ss.name, ss_path(ss.id) %> <%= ss.infos.first.page_count %>  </h6>
+  <h6><%= link_to ss.name, ss_path(ss.id) %> <%= ss.infos.first.page_count if defined? ss.infos.first.page_count %>  </h6>
 <% end %>

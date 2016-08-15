@@ -1,5 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe Category, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Category, type: :model do
+ 
+  it { is_expected.to have_many(:pages) }
+  
+   context "unique" do
+    #subject { build(:ref) }
+    it { is_expected.to validate_uniqueness_of(:name) }
+  end
 end

@@ -1,2 +1,4 @@
-1;vesti;http://www.vesti.ru/vesti.rss;2016-08-06 11:36:29 +0300;2016-08-06 11:36:29 +0300;vesti.jpeg;image/jpeg;1145;2016-08-06 11:36:29 +0300
-2;2vesti;2vesti;2016-08-08 20:08:14 +0300;2016-08-08 20:08:14 +0300;100dorog.png;image/png;886;2016-08-08 20:08:13 +0300
+1;vesti;http://www.vesti.ru/vesti.rss;2016-07-21 12:00:11 +0300;2016-08-15 15:01:35 +0300;commun.ico;image/x-icon;0;;0;;false
+5;life;https://life.ru/xml/feed.xml;2016-07-28 15:52:10 +0300;2016-08-15 15:01:35 +0300;ng.ico;image/x-icon;0;;0;;
+6;newskaz;http://www.newskaz.ru/export/rss2/archive/index.xml;2016-07-29 11:57:43 +0300;2016-08-15 15:01:35 +0300;newsru.ico;image/x-icon;0;;0;;
+7;infox;http://www.infox.ru/rss.xml;2016-08-04 13:55:11 +0300;2016-08-15 15:01:35 +0300;regnum.png;image/png;0;;0;;

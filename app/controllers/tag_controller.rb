@@ -34,6 +34,7 @@ class TagController < ApplicationController
     s1=a[0][2,a[0].length-2]
     tagoverlap=Tagoverlap.find_by_id(s1)|| Tagoverlap.new
     tagoverlap.name=a[1][0,a[1].length-2]
+    дщф
     tagoverlap.save
    end
   end
