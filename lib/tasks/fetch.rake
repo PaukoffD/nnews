@@ -13,7 +13,7 @@ task fetch: :environment do
      end   
     feed.entries.each do |entry|
        @p = Page.create(title: entry.title,
-                            time: entry.published.to_datetime,
+                            published: entry.published.to_datetime,
                             ref: entry.url,
                             source_id: s.id,
                             summary: entry.summary

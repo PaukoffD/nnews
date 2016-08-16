@@ -25,7 +25,7 @@ module PagesHelper
    pg=Page.new
    pg.title='#{s.title}'.to_s
    pg.ref='#{s.ref}'.to_s
-   pg.time='#{s.time}'.to_s
+   pg.published='#{s.published}'.to_s
    pg.save
   end
 end
@@ -109,7 +109,7 @@ end
     @pages = $redis.get('pages')
 
     if @pages.nil?
-      @pages = Page.order('time DESC').page(params[:page]).to_json
+      @pages = Page.order('published DESC').page(params[:page]).to_json
       $redis.set('pages', @pages)
       # Expire the cache, reorder('time DESC').page(params[:page]).very 5 hours
       $redis.expire('pages', 17.minutes.to_i)
@@ -151,7 +151,7 @@ end
    source = Source.all
    source.rss.each do |s|
    url = s.ref
-    @newest_entry = Page.order(time: :desc).where(source_id: s.id).first
+ #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
    begin
     feed = Feedjira::Feed.fetch_and_parse url
     
@@ -162,10 +162,10 @@ end
     
     feed.entries.each do |entry|
      
-      next unless !@newest_entry || entry.published > @newest_entry.time
+     # next unless !@newest_entry || entry.published > @newest_entry.published
 #loa
-      @p = Page.create(title: entry.title,
-                            time: entry.published.to_datetime,
+      @p = Page.new(title: entry.title,
+                            published: entry.published,
                             ref: entry.url,
                             source_id: s.id,
                             summary: entry.summary

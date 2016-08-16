@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160812073240) do
+ActiveRecord::Schema.define(version: 20160816101420) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -70,13 +70,13 @@ ActiveRecord::Schema.define(version: 20160812073240) do
   create_table "pages", force: :cascade do |t|
     t.string   "title"
     t.string   "ref"
-    t.datetime "time"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "source_id",   default: 0
     t.string   "summary"
     t.integer  "category_id", default: 0
     t.string   "image"
+    t.datetime "published"
   end
 
   add_index "pages", ["ref"], name: "index_pages_on_ref", unique: true
