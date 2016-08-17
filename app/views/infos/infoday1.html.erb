@@ -11,8 +11,8 @@
  <h5> <%= image_tag(a.avatar.url(:thumb), class: 'avatar1', :size => "20") %>
  <%=  link_to a.name, pages_path(a.id) %>
     |Всего записей в базе: <%= a.source.page_count %>
-	|количество записей в базе за день: <%= Page.where(source_id: a.id, time: Date.today.to_time.beginning_of_day..Date.today.to_time.end_of_day).count %>
-	|  количество записей в базе за прошлый день: <%= Page.where(source_id: a.id, time: (Date.today-1).to_time.beginning_of_day..(Date.today-1).to_time.end_of_day).count %>
+	|количество записей в базе за день: <%= Page.where(source_id: a.id, published: Date.today.to_time.beginning_of_day..Date.today.to_time.end_of_day).count %>
+	|  количество записей в базе за прошлый день: <%= Page.where(source_id: a.id, published: (Date.today-1).to_time.beginning_of_day..(Date.today-1).to_time.end_of_day).count %>
 	
 	</h5>
 <% end %> 
