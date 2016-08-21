@@ -1,9 +1,6 @@
 
 
 <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
-<style> 
-
-</style>
 
 <p id="notice"><%= notice %></p>
 
@@ -124,10 +121,10 @@
 	 <% a.summary= " " %>
 	 <% end %>
       <details>
-       <summary><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: truncate_html(a.summary, length: 400, omission: '...(далее)') %></h6></div></summary>
+       <summary><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %></h6></div></summary>
        
 
-       <div class=inline><%= image_tag(a.image, class: 'avatar', :size => "200") %> <%= markdown(truncate_html(a.summary, length: 400, omission: '...(далее)')) %></div>
+       <div class=inline><%= image_tag(a.image, class: 'avatar', :size => "200") %> <%= markdown(a.summary) %></div>
        
        </details> 
 	  

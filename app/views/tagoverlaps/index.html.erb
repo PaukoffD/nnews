@@ -16,9 +16,9 @@
   <tbody>
     <% @tagoverlaps.each do |tagoverlap| %>
       <tr>
-        <td><%= tagoverlap.tag_id %></td>
+       
         <td><%= tagoverlap.name %></td>
-        <td><%= tagoverlap.tagtarget_id %></td>
+      
         <td><%= tagoverlap.nametarget %></td>
         <td><%= link_to 'Show', tagoverlap %></td>
         <td><%= link_to 'Edit', edit_tagoverlap_path(tagoverlap) %></td>
