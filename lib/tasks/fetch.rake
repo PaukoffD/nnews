@@ -18,14 +18,15 @@ task fetch: :environment do
                             source_id: s.id,
                             summary: entry.summary
                             )
-      s2 = entry.categories[0] if defined? entry.category
+      s2 = entry.categories[0] if defined? entry.categories
       cat1 = Category.find_by(name: s2)
       #cat1.name="Без категории" if cat1.name=="19"
       #cat1.save
+
       if cat1.blank?
          c = Category.new
          c.name = entry.categories[0]
-         c.name=="Без категории" if c.name==nil
+         c.name = "Без категории" if c.name==nil
          c.save
          cat1 = Category.last
        end
