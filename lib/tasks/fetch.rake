@@ -40,12 +40,20 @@ task fetch: :environment do
       @p.category_id = cat1.id
       @p.image=entry.image if defined? entry.image
        if @p.save
-        bot.api.send_message(chat_id: 118319165, text: "#{@p.ref}")
+        #bot.api.send_message(chat_id: 118319165, text: "#{@p.ref}")
         cnt=cnt+1
         #loa
        end 
 
     end  
+
   end  
+  pages = Page.order('published ASC').limit(cnt)
+    pages.each do |s|
+      puts s.title
+      bot.api.send_message(chat_id: 118319165, text: "#{@p.title} #{@p.ref}")
+      #sleep 15
+      #loa
+    end
   end
 end
