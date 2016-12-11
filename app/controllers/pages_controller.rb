@@ -21,13 +21,26 @@ class PagesController < ApplicationController
   require 'text'
   require 'time'
   require 'csv'
-
+  require 'telegram/bot'
 
   include PagesHelper
 
   def load
    load_rss
   end
+
+def tgram
+  token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
+Telegram::Bot::Client.run(token) do |bot|
+  pages = Page.order('created_at DESC').limit(10)
+    pages.each do |s|
+      puts s.title
+      bot.api.send_message(chat_id: 118319165, text: "#{s.ref}")
+      #sleep 15
+      #loa
+    end
+  end
+end
   
   def analyze
    

@@ -149,8 +149,12 @@ end
 
   def load_rss
    source = Source.all
+   token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
+   Telegram::Bot::Client.run(token) do |bot|
+   cnt=0
    source.rss.each do |s|
    url = s.ref
+   
  #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
    begin
     feed = Feedjira::Feed.fetch_and_parse url
@@ -158,7 +162,7 @@ end
     
     rescue Faraday::Error::ConnectionFailed => e
       next
-     end   
+   end   
     
     feed.entries.each do |entry|
      
@@ -210,11 +214,16 @@ end
        ActsAsTaggableOn.delimiter = [' ', ',']
       #loa
       @p.tag_list.add(@p.title, parse: true)
-      @p.save
-     
+       if @p.save
+        bot.api.send_message(chat_id: 118319165, text: "#{@p.ref}")
+        cnt=cnt+1
+        #loa
+       end 
+     #loa
     end 
    end  
+  puts cnt 
  end
-
+end
 
 end

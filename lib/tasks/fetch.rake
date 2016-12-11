@@ -1,6 +1,9 @@
 task fetch: :environment do
  puts "RSS load" 
  source = Source.all
+ token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
+ Telegram::Bot::Client.run(token) do |bot|
+ cnt=0
    source.rss.each do |s|
     url = s.ref
     puts s.name, s.ref
@@ -32,9 +35,13 @@ task fetch: :environment do
        end
       @p.category_id = cat1.id
       @p.image=entry.image if defined? entry.image
-      @p.save
+       if @p.save
+        bot.api.send_message(chat_id: 118319165, text: "#{@p.ref}")
+        cnt=cnt+1
+        #loa
+       end 
 
     end  
-    
+  end  
   end
 end

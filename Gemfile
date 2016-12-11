@@ -65,6 +65,8 @@ gem 'truncate_html'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
+gem 'telegram_bot'
+gem 'telegram-bot-ruby'
 
 group :development, :test do
   gem 'sqlite3'
