@@ -224,7 +224,7 @@ end
     puts cnt  
    end  
   puts cnt 
-  pages = Page.order('published DESC').limit(cnt)
+  pages = Page.order('published ASC').limit(cnt)
     pages.each do |s|
       #puts s.title
       bot.api.send_message(chat_id: 118319165, text: "#{s.title} #{s.ref}")
