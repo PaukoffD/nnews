@@ -1,4 +1,7 @@
+require 'rubygems'
 require 'telegram/bot'
+
+
 task fetch: :environment do
  puts "RSS load" 
  source = Source.all
