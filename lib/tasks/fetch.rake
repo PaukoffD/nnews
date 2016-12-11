@@ -51,7 +51,7 @@ task fetch: :environment do
   pages = Page.order('published ASC').limit(cnt)
     pages.each do |s|
       puts s.title
-      bot.api.send_message(chat_id: 118319165, text: "#{@p.title} #{@p.ref}")
+      bot.api.send_message(chat_id: 118319165, text: "#{s.title} #{s.ref}")
       #sleep 15
       #loa
     end
