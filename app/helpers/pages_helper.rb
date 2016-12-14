@@ -214,16 +214,24 @@ end
          ActsAsTaggableOn.delimiter = [' ', ',']
         #loa
         @p.tag_list.add(@p.title, parse: true)
-         if @p.save
-          #bot.api.send_message(chat_id: 118319165, text: "#{@p.ref}")
-          cnt=cnt+1
-          #loa
-         end 
-       #loa
+
+        begin
+          Page.transaction do
+            cnt=cnt+1
+            @p.save!
+          end
+         rescue => e
+           cnt=cnt-1
+         
+        end
+
+
+
       end 
     puts cnt  
    end  
   puts cnt 
+  
   pages = Page.order('published DESC').limit(cnt)
     pages.each do |s|
       #puts s.title
