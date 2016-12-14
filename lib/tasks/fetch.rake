@@ -39,11 +39,15 @@ task fetch: :environment do
        end
       @p.category_id = cat1.id
       @p.image=entry.image if defined? entry.image
-       if @p.save
-        #bot.api.send_message(chat_id: 118319165, text: "#{@p.ref}")
-        cnt=cnt+1
-        #loa
-       end 
+       begin
+          Page.transaction do
+            cnt=cnt+1
+            @p.save!
+          end
+         rescue => e
+           cnt=cnt-1
+         
+        end
 
     end  
 
