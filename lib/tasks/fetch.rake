@@ -15,7 +15,7 @@ task fetch: :environment do
     feed = Feedjira::Feed.fetch_and_parse url
     
     
-    rescue Faraday::Error::ConnectionFailed => e
+    rescue Feedjira::FetchFailure => e
       next
      end   
     feed.entries.each do |entry|
