@@ -161,6 +161,7 @@ end
       
       
       rescue Feedjira::FetchFailure => e
+         Rails.logger.error e.message
         next
      end   
     

@@ -16,6 +16,7 @@ task fetch: :environment do
     
     
     rescue Feedjira::FetchFailure => e
+       Rails.logger.error e.message
       next
      end   
     feed.entries.each do |entry|
