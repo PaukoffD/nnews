@@ -160,7 +160,7 @@ end
       feed = Feedjira::Feed.fetch_and_parse url
       
       
-      rescue Faraday::Error::ConnectionFailed => e
+      rescue Feedjira::FetchFailure => e
         next
      end   
     
