@@ -163,6 +163,10 @@ end
       rescue Feedjira::FetchFailure => e
          Rails.logger.error e.message
         next
+     #end   
+     rescue Feedjira::NoParserAvailable => e
+       Rails.logger.error e.message
+      next
      end   
     
       feed.entries.each do |entry|

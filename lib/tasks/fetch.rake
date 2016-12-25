@@ -18,6 +18,10 @@ task fetch: :environment do
     rescue Feedjira::FetchFailure => e
        Rails.logger.error e.message
       next
+     #end   
+    rescue Feedjira::NoParserAvailable => e
+       Rails.logger.error e.message
+      next
      end   
     feed.entries.each do |entry|
        @p = Page.create(title: entry.title,
@@ -55,7 +59,7 @@ task fetch: :environment do
   end  
   pages = Page.order('published DESC').limit(cnt)
     pages.each do |s|
-      puts s.title
+      #puts s.title
       bot.api.send_message(chat_id: "@paukoffnews" , text: "#{s.title} #{s.ref}")
       #sleep 15
       #loa
