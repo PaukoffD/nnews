@@ -209,7 +209,7 @@ end
 
           if cat1.blank?
              c = Category.new
-             c.name = entry.categories[0]
+             c.name = s2
              c.name = "Без категории" if c.name==nil
              c.save
              cat1 = Category.last
