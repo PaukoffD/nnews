@@ -17,6 +17,109 @@
 module PagesHelper
   require 'will_paginate/array'
 
+
+  def proba1
+   source = Source.all
+   token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
+   Telegram::Bot::Client.run(token) do |bot|
+   cnt=0
+   source.rss.each do |s|
+     url = s.ref
+     
+    #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
+     begin
+      feed = Feedjira::Feed.fetch_and_parse url
+      
+      
+      rescue Feedjira::FetchFailure => e
+         Rails.logger.error e.message
+        next
+     #end   
+     rescue Feedjira::NoParserAvailable => e
+       Rails.logger.error e.message
+      next
+     end   
+
+     lo
+    
+      feed.entries.each do |entry|
+       
+       # next unless !@newest_entry || entry.published > @newest_entry.published
+       #loa
+       @p = Page.new(title: entry.title,
+                              published: entry.published,
+                              ref: entry.url,
+                              source_id: s.id,
+                              summary: entry.summary
+                              )
+       #@p.title = entry.title
+        #@p.ref = entry.url
+        #@p.time = entry.published.to_datetime
+        #@p.source_id = s.id
+        #@p.image=entry.image if defined? entry.image
+       # s2 = entry.categories[0] if defined? entry.category
+        #cat1 = Category.find_by(name: s2) || Category.new
+        #cat1.name="Без категории" if cat1.id==19
+        #cat1.save
+        #if cat1.blank?
+        #   c = Category.new
+       #    c.name = entry.categories[0]
+        #   c.name=="Без категории" if c.name==nil
+       #    c.save
+       #    cat1 = Category.last
+      #   end
+      #  @p.category_id = cat1.id
+     #   if entry.summary.blank?
+      #    entry.summary = ' '
+     #    else
+     #     @p.summary = entry.summary[0..400]
+     #    
+    #     end
+        s2 = entry.categories[0] if defined? entry.categories
+        cat1 = Category.find_by(name: s2)
+        #cat1.name="Без категории" if cat1.name=="19"
+        #cat1.save
+
+          if cat1.blank?
+             c = Category.new
+             c.name = s2
+             c.name = "Без категории" if c.name==nil
+             c.save
+             cat1 = Category.last
+           end
+        @p.category_id = cat1.id
+       @p.image=entry.image if defined? entry.image
+         ActsAsTaggableOn.delimiter = [' ', ',']
+        #loa
+        @p.tag_list.add(@p.title, parse: true)
+
+        begin
+          Page.transaction do
+            cnt=cnt+1
+            @p.save!
+          end
+         rescue => e
+           cnt=cnt-1
+         
+        end
+
+
+
+      end 
+    puts cnt  
+   end  
+  puts cnt 
+  
+  pages = Page.order('published DESC').limit(cnt)
+    pages.each do |s|
+      #puts s.title
+      bot.api.send_message(chat_id: 118319165 , text: "#{s.title} #{s.ref}")
+     
+    end
+  end
+    
+  end
+
   def load_html
    
   page = Nokogiri::HTML(open('#{s.common1}'))

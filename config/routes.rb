@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   get 'html', to: 'sourcehtmls#html'
   get 'tmp', to: 'pages#tmp'
   get 'tgram', to: 'pages#tgram'
+  get 'proba', to: 'pages#proba'
   get 'sourceexport', to:   'sources#sourceexport'
   get 'sourceimport', to:   'sources#sourceimport'
   get 'tagexceptexport',  controller: 'tag', to: 'tag#tagexceptexport'

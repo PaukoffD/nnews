@@ -29,6 +29,10 @@ class PagesController < ApplicationController
    load_rss
   end
 
+  def proba
+   proba1
+  end
+
 def tgram
   token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
 Telegram::Bot::Client.run(token) do |bot|
