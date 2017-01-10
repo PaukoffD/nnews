@@ -40,7 +40,7 @@ module PagesHelper
       next
      end   
 
-     lo
+     #lo
     
       feed.entries.each do |entry|
        
@@ -52,29 +52,7 @@ module PagesHelper
                               source_id: s.id,
                               summary: entry.summary
                               )
-       #@p.title = entry.title
-        #@p.ref = entry.url
-        #@p.time = entry.published.to_datetime
-        #@p.source_id = s.id
-        #@p.image=entry.image if defined? entry.image
-       # s2 = entry.categories[0] if defined? entry.category
-        #cat1 = Category.find_by(name: s2) || Category.new
-        #cat1.name="Без категории" if cat1.id==19
-        #cat1.save
-        #if cat1.blank?
-        #   c = Category.new
-       #    c.name = entry.categories[0]
-        #   c.name=="Без категории" if c.name==nil
-       #    c.save
-       #    cat1 = Category.last
-      #   end
-      #  @p.category_id = cat1.id
-     #   if entry.summary.blank?
-      #    entry.summary = ' '
-     #    else
-     #     @p.summary = entry.summary[0..400]
-     #    
-    #     end
+       
         s2 = entry.categories[0] if defined? entry.categories
         cat1 = Category.find_by(name: s2)
         #cat1.name="Без категории" if cat1.name=="19"
@@ -110,7 +88,7 @@ module PagesHelper
    end  
   puts cnt 
   
-  pages = Page.order('published DESC').limit(cnt)
+  pages = Page.order('created_at DESC').limit(cnt)
     pages.each do |s|
       #puts s.title
       bot.api.send_message(chat_id: 118319165 , text: "#{s.title} #{s.ref}")
@@ -340,7 +318,7 @@ end
    end  
   puts cnt 
   
-  pages = Page.order('published DESC').limit(cnt)
+  pages = Page.order('created_at DESC').limit(cnt)
     pages.each do |s|
       #puts s.title
       bot.api.send_message(chat_id: 118319165 , text: "#{s.title} #{s.ref}")
