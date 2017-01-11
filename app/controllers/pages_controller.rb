@@ -22,8 +22,28 @@ class PagesController < ApplicationController
   require 'time'
   require 'csv'
   require 'telegram/bot'
+  require 'matrix'
 
   include PagesHelper
+
+  def diff
+    corpus=[]
+    pages = Page.order('created_at DESC').limit(100)
+    pages.each do |s|
+      doc = TfIdfSimilarity::Document.new(s.title)  
+      corpus << doc     
+    end
+    model = TfIdfSimilarity::TfIdfModel.new(corpus)
+    matrix = model.similarity_matrix
+    puts matrix
+    for i in 0..99 do
+      for j in 0..99 do
+        if matrix[i,j]>0.6 && matrix[i,j]<0.998
+          puts matrix[i,j]
+        end
+      end
+    end
+  end
 
   def load
    load_rss
