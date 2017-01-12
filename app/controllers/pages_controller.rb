@@ -38,8 +38,12 @@ class PagesController < ApplicationController
     puts matrix
     for i in 0..99 do
       for j in 0..99 do
-        if matrix[i,j]>0.6 && matrix[i,j]<0.998
+        if matrix[i,j]>0.5 && matrix[i,j]<0.998
           puts matrix[i,j]
+          puts i
+          puts j
+          puts pages[i].title
+          puts pages[j].title
         end
       end
     end
