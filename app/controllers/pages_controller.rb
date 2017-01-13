@@ -23,8 +23,9 @@ class PagesController < ApplicationController
   require 'csv'
   require 'telegram/bot'
   require 'matrix'
+  require 'dop'
 
-  include PagesHelper
+  #include PagesHelper
 
   def diff
     corpus=[]
@@ -50,7 +51,8 @@ class PagesController < ApplicationController
   end
 
   def load
-   load_rss
+    t1=Dop.new
+    t1.load_rss
   end
 
   def proba
