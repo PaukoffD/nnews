@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   # get 'data/:data', to: 'pages#index', as: :data
   get 'info', to: 'infos#info'
   get 'remove_tags',  controller: 'tag', to: 'tag#rtags'
-  get 'tagexport', to:   'pages#tagexport', controller: 'tag'
+  get 'tagexport',  controller: 'tag', to: 'tag#tagexport'
   get 'tagimport', to:   'pages#tagimport', controller: 'tag'
   get 'search_tags', to: 'pages#search_tags'
   post 'search_tags', to: 'pages#index'
@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   get 'tgram', to: 'pages#tgram'
   get 'proba', to: 'pages#proba'
   get 'diff', to: 'pages#diff'
+  get 'parser', to: 'pages#parser'
   get 'sourceexport', to:   'sources#sourceexport'
   get 'sourceimport', to:   'sources#sourceimport'
   get 'tagexceptexport',  controller: 'tag', to: 'tag#tagexceptexport'

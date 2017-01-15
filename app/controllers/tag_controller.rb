@@ -1,11 +1,13 @@
 class TagController < ApplicationController
 
   def tagexceptexport
+    str=""
     @tags = Tagexcept.all
-    f=File.new('tagexcepts.txt', 'r+') 
+    #f=File.new('tagexcepts.txt', 'r+') 
     @tags.each do |tt|
-      f << [tt.id.to_s,tt.name].join(';') <<"\n"
-     end
+      str<<[tt.id.to_s,tt.name].join(';') <<"\n"
+    end
+     File.open('tagexcepts.txt', 'w+'){ |somefile| somefile.puts str}
   end
 
   def tagexceptimport

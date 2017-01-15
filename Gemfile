@@ -99,6 +99,7 @@ group :development do
   gem 'faker'
   gem 'shoulda'
   gem 'cucumber-rails', require: false
+  gem 'pry'
   #gem 'database_cleaner'
   gem 'launchy'
   gem 'rails_best_practices', require: false

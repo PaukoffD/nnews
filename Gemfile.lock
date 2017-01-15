@@ -562,6 +562,7 @@ DEPENDENCIES
   nokogiri (~> 1.6.8.rc2)
   paperclip
   pg (~> 0.18.4)
+  pry
   puma (~> 3.0)
   rack-mini-profiler
   rails (~> 4.2.6)
