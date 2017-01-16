@@ -4,13 +4,13 @@
 
 
  
-<% @source.rss.each do |a| %>
-   <% url=a.ref %>
-   <% feed = Feedjira::Feed.fetch_and_parse url %>
-   <center><b><%=  a.name %></br>
-   <%=  a.ref %></center></b></br>
-   <%=  feed.entries.first.to_a %></br>
-<% end %> 
+
+<% (0..@feed.length-1).each do |i| %>
+   
+   <center><b><%=  @feedname[i] %></br>
+   <%=  @feedurl[i] %></center></b></br>
+   <%=  @feed[i] %></br>
+<% end %>  
 
 
 

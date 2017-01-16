@@ -27,16 +27,40 @@ class PagesController < ApplicationController
   require 'set'
   require 'uri'
   require 'nokogiri'
+  require 'lingua/stemmer'
 
-
-  #include PagesHelper
+  include PagesHelper
 
   def diff
     corpus=[]
+    stemmer= Lingua::Stemmer.new(:language => "ru")
+    
     pages = Page.order('created_at DESC').limit(100)
     pages.each do |s|
+      tokens = UnicodeUtils.each_word(s.title).to_a
+
+      term_counts = Hash.new(0)
+      size = 0
+
+      tokens.each do |token|
+  # Unless the token is numeric.
+  unless token[/\A\d+\z/]
+    # Remove all punctuation from tokens.
+    term_counts[token.gsub(/\p{Punct}/, '')] += 1
+    size += 1
+  end
+end 
+
+
+
+
+
+
+      s1=stemmer.stem(%w(#{s.title}))
+      puts s1
       doc = TfIdfSimilarity::Document.new(s.title)  
-      corpus << doc     
+      corpus << doc  
+      lo   
     end
     model = TfIdfSimilarity::TfIdfModel.new(corpus)
     matrix = model.similarity_matrix
@@ -137,7 +161,10 @@ end
 
   def rss
     @source = Source.all
-   
+    analyzerss
+    #@feed=FeedPresenter.new(@source)
+    #@feed.caption
+    #lo
   end
 
   def html
@@ -265,6 +292,7 @@ end
         #binding.pry
         # Make these URIs, throwing out problem ones like mailto:
         @uris = hrefs.map{ |href| URI.join( page_uri, href ) rescue nil }.compact
+        #binding.pry
         #puts uris
         #@uris=uris
         #puts @uris
