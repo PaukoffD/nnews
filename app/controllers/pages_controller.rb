@@ -33,16 +33,22 @@ class PagesController < ApplicationController
 
   def diff
     corpus=[]
-    stemmer= Lingua::Stemmer.new(:language => "ru")
+    ttags=[]
+    tags=Tagexcept.all
+    tags.each do |t|
+      ttags<<t.name
+    end
+    #stemmer= Lingua::Stemmer.new(:language => "ru")
     
     pages = Page.order('created_at DESC').limit(100)
     pages.each do |s|
-      tokens = UnicodeUtils.each_word(s.title).to_a
+      s1=Lingua.stemmer( s.title.split, :language => "ru" )-ttags
 
       term_counts = Hash.new(0)
       size = 0
 
-      tokens.each do |token|
+      s1.each do |token|
+        token.downcase!
   # Unless the token is numeric.
   unless token[/\A\d+\z/]
     # Remove all punctuation from tokens.
@@ -56,7 +62,7 @@ end
 
 
 
-      s1=stemmer.stem(%w(#{s.title}))
+      
       puts s1
       doc = TfIdfSimilarity::Document.new(s.title)  
       corpus << doc  

@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.6'
+#gem 'rails', '~> 4.2.6'
+#gem 'activesupport', :path => File.join(File.dirname(__FILE__), '/vendor/gems/activesupport-4.2.7.1')
 
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
