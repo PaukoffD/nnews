@@ -49,10 +49,13 @@ class PagesController < ApplicationController
       s1.each do |p|
        s2<<p+" "
       end 
-      for i in (0..2) do
-       s.taggs << s1[i]+" "
-      end 
-      s.save
+      if s.taggs.blank?
+        for i in (0..2) do
+          s.taggs << s1[i]+" "
+        end
+        s.save
+      end   
+      
       doc = TfIdfSimilarity::Document.new(s2)  
       corpus << doc  
       #lo   
@@ -69,8 +72,9 @@ class PagesController < ApplicationController
           puts pages[i].title
           puts pages[j].title
           pm=Pagematch.new
-          pm.page_id=i
-          pm.match_id=j
+          pm.page_id=pages[i].id
+          pm.match_id=pages[j].id
+          pm.koef=matrix[i,j]
           s = Page.find(pages[i].id)
           s.flag_match=true
           if s.cnt_match.nil?
@@ -78,8 +82,21 @@ class PagesController < ApplicationController
           else
             s.cnt_match+=1 
           end  
-          s.save
-          pm.save
+
+          begin
+          Page.transaction do
+           s.save!
+           pm.save!
+          end
+         rescue => e
+           next
+         #lo
+        end
+
+
+
+          
+          #lo
         end
       end
     end
@@ -115,8 +132,9 @@ class PagesController < ApplicationController
           puts pages[i].title
           puts pages[j].title
           pm=Pagematch.new
-          pm.page_id=i
-          pm.match_id=j
+          pm.page_id=pages[i].id
+          pm.match_id=pages[j].id
+          pm.koef=matrix[i,j]
           s = Page.find(pages[i].id)
           s.flag_match=true
           if s.cnt_match.nil?
@@ -124,8 +142,15 @@ class PagesController < ApplicationController
           else
             s.cnt_match+=1 
           end  
-          s.save
-          pm.save
+          begin
+          Page.transaction do
+           s.save!
+           pm.save!
+          end
+         rescue => e
+           next
+         #lo
+        end
         end
       end
     end
