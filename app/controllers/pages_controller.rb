@@ -83,6 +83,53 @@ class PagesController < ApplicationController
         end
       end
     end
+
+    pages = Page.order('created_at DESC').limit(100)
+    pages.each do |s|
+      mpages=Page.where(taggs: s.taggs)
+      #lo
+      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+      
+      #puts s1
+      s2=''
+      s1.each do |p|
+       s2<<p+" "
+      end 
+      for i in (0..2) do
+       s.taggs << s1[i]+" "
+      end 
+      s.save
+      doc = TfIdfSimilarity::Document.new(s2)  
+      corpus << doc  
+      #lo   
+    end
+    model = TfIdfSimilarity::TfIdfModel.new(corpus)
+    matrix = model.similarity_matrix
+    puts matrix
+    for i in 0..99 do
+      for j in 0..99 do
+        if matrix[i,j]>0.5 && matrix[i,j]<0.998
+          puts matrix[i,j]
+          puts i
+          puts j
+          puts pages[i].title
+          puts pages[j].title
+          pm=Pagematch.new
+          pm.page_id=i
+          pm.match_id=j
+          s = Page.find(pages[i].id)
+          s.flag_match=true
+          if s.cnt_match.nil?
+            s.cnt_match=1 
+          else
+            s.cnt_match+=1 
+          end  
+          s.save
+          pm.save
+        end
+      end
+    end
+
   end
 
   def load
