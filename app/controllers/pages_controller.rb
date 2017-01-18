@@ -112,10 +112,13 @@ class PagesController < ApplicationController
       s1.each do |p|
        s2<<p+" "
       end 
-      for i in (0..2) do
-       s.taggs << s1[i]+" "
-      end 
-      s.save
+      if s.taggs.blank?
+        for i in (0..2) do
+          s.taggs << s1[i]+" "
+        end
+        s.save
+      end   
+      
       doc = TfIdfSimilarity::Document.new(s2)  
       corpus << doc  
       #lo   
