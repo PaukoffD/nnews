@@ -42,31 +42,20 @@ class PagesController < ApplicationController
     
     pages = Page.order('created_at DESC').limit(100)
     pages.each do |s|
-      s1=Lingua.stemmer( s.title.split, :language => "ru" )-ttags
-
-      term_counts = Hash.new(0)
-      size = 0
-
-      s1.each do |token|
-        token.downcase!
-  # Unless the token is numeric.
-  unless token[/\A\d+\z/]
-    # Remove all punctuation from tokens.
-    term_counts[token.gsub(/\p{Punct}/, '')] += 1
-    size += 1
-  end
-end 
-
-
-
-
-
-
+      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
       
-      puts s1
-      doc = TfIdfSimilarity::Document.new(s.title)  
+      #puts s1
+      s2=''
+      s1.each do |p|
+       s2<<p+" "
+      end 
+      for i in (0..2) do
+       s.taggs << s1[i]+" "
+      end 
+      s.save
+      doc = TfIdfSimilarity::Document.new(s2)  
       corpus << doc  
-      lo   
+      #lo   
     end
     model = TfIdfSimilarity::TfIdfModel.new(corpus)
     matrix = model.similarity_matrix
@@ -79,6 +68,18 @@ end
           puts j
           puts pages[i].title
           puts pages[j].title
+          pm=Pagematch.new
+          pm.page_id=i
+          pm.match_id=j
+          s = Page.find(pages[i].id)
+          s.flag_match=true
+          if s.cnt_match.nil?
+            s.cnt_match=1 
+          else
+            s.cnt_match+=1 
+          end  
+          s.save
+          pm.save
         end
       end
     end

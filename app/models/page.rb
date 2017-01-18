@@ -12,6 +12,9 @@
 #  category_id :integer          default(0)
 #  image       :string
 #  published   :datetime
+#  taggs       :string           default("")
+#  cnt_match   :integer          default(0)
+#  flag_match  :boolean          default(FALSE)
 #
 # Indexes
 #
