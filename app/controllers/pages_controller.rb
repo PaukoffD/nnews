@@ -31,134 +31,143 @@ class PagesController < ApplicationController
 
   include PagesHelper
 
-  def diff
-    corpus=[]
-    ttags=[]
-    tags=Tagexcept.all
-    tags.each do |t|
-      ttags<<t.name
-    end
-    #stemmer= Lingua::Stemmer.new(:language => "ru")
-    
-    pages = Page.order('created_at DESC').limit(100)
-    pages.each do |s|
-      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+    def diff
+      corpus=[]
+      ttags=[]
+      tags=Tagexcept.all
+      tags.each do |t|
+        ttags<<t.name
+      end
+      #stemmer= Lingua::Stemmer.new(:language => "ru")
       
-      #puts s1
-      s2=''
-      s1.each do |p|
-       s2<<p+" "
-      end 
-      if s.taggs.blank?
-        for i in (0..2) do
-          s.taggs << s1[i]+" "
-        end
-        s.save
-      end   
-      
-      doc = TfIdfSimilarity::Document.new(s2)  
-      corpus << doc  
-      #lo   
-    end
-    model = TfIdfSimilarity::TfIdfModel.new(corpus)
-    matrix = model.similarity_matrix
-    puts matrix
-    for i in 0..99 do
-      for j in 0..99 do
-        if matrix[i,j]>0.5 && matrix[i,j]<0.998
-          puts matrix[i,j]
-          puts i
-          puts j
-          puts pages[i].title
-          puts pages[j].title
-          pm=Pagematch.new
-          pm.page_id=pages[i].id
-          pm.match_id=pages[j].id
-          pm.koef=matrix[i,j]
-          s = Page.find(pages[i].id)
-          s.flag_match=true
-          if s.cnt_match.nil?
-            s.cnt_match=1 
-          else
-            s.cnt_match+=1 
-          end  
-
-          begin
-          Page.transaction do
-           s.save!
-           pm.save!
+      pages = Page.order('created_at DESC').limit(200)
+      pages.each do |s|
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+        
+        #puts s1
+        s2=''
+        s1.each do |p|
+         s2<<p+" "
+        end 
+        if s.taggs.blank?
+          for i in (0..2) do
+            s.taggs << s1[i]+" "
           end
-         rescue => e
-           next
-         #lo
-        end
+          s.save
+        end   
+        
+        doc = TfIdfSimilarity::Document.new(s2)  
+        corpus << doc  
+        #lo   
+      end
+      model = TfIdfSimilarity::TfIdfModel.new(corpus)
+      matrix = model.similarity_matrix
+      puts matrix
+      for i in 0..99 do
+        for j in 0..99 do
+          if matrix[i,j]>0.5 && matrix[i,j]<0.998
+            puts matrix[i,j]
+            puts i
+            puts j
+            puts pages[i].title
+            puts pages[j].title
+            pm=Pagematch.new
+            pm.page_id=pages[i].id
+            pm.match_id=pages[j].id
+            pm.koef=matrix[i,j]
+            s = Page.find(pages[i].id)
+            s.flag_match=true
+            if s.cnt_match.nil?
+              s.cnt_match=1 
+            else
+              s.cnt_match+=1 
+            end  
+
+            begin
+            Page.transaction do
+             s.save!
+             pm.save!
+            end
+           rescue => e
+             next
+           #lo
+          end
 
 
 
-          
-          #lo
+            
+            #lo
+          end
         end
       end
-    end
-
-    pages = Page.order('created_at DESC').limit(100)
-    pages.each do |s|
-      mpages=Page.where(taggs: s.taggs)
+      corpus=[]
+      pages = Page.order('created_at DESC').limit(6)
+      pages.each do |s|
+        spl=s.taggs.split
+        mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'")
+        lo
+        next  if mpages.length==1
+        #binding.pry
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+        
+        #puts s1
+        s2=''
+        s1.each do |p|
+         s2<<p+" "
+        end 
+        if s.taggs.blank?
+          for i in (0..2) do
+            s.taggs << s1[i]+" "
+          end
+          s.save
+        end   
+        
+        doc = TfIdfSimilarity::Document.new(s2)  
+        corpus << doc 
+        #lo
+        mpages.each do |ss|
+          doc = TfIdfSimilarity::Document.new(ss.taggs)  
+          corpus << doc  
+        end
+        break  
+      end
       #lo
-      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
-      
-      #puts s1
-      s2=''
-      s1.each do |p|
-       s2<<p+" "
-      end 
-      if s.taggs.blank?
-        for i in (0..2) do
-          s.taggs << s1[i]+" "
-        end
-        s.save
-      end   
-      
-      doc = TfIdfSimilarity::Document.new(s2)  
-      corpus << doc  
-      #lo   
-    end
-    model = TfIdfSimilarity::TfIdfModel.new(corpus)
-    matrix = model.similarity_matrix
-    puts matrix
-    for i in 0..99 do
-      for j in 0..99 do
-        if matrix[i,j]>0.5 && matrix[i,j]<0.998
-          puts matrix[i,j]
-          puts i
-          puts j
-          puts pages[i].title
-          puts pages[j].title
-          pm=Pagematch.new
-          pm.page_id=pages[i].id
-          pm.match_id=pages[j].id
-          pm.koef=matrix[i,j]
-          s = Page.find(pages[i].id)
-          s.flag_match=true
-          if s.cnt_match.nil?
-            s.cnt_match=1 
-          else
-            s.cnt_match+=1 
-          end  
-          begin
-          Page.transaction do
-           s.save!
-           pm.save!
+      model = TfIdfSimilarity::TfIdfModel.new(corpus)
+      matrix = model.similarity_matrix
+      puts matrix
+      for i in 0..corpus.length-1 do
+        for j in 0..corpus.length-1 do
+          if matrix[i,j]>0.5 && matrix[i,j]<0.998
+            puts matrix[i,j]
+            puts i
+            puts j
+            puts pages[i].title
+            puts pages[j].title
+            pm=Pagematch.new
+            pm.page_id=pages[i].id
+            pm.match_id=pages[j].id
+            pm.koef=matrix[i,j]
+            s = Page.find(pages[i].id)
+            s.flag_match=true
+            if s.cnt_match.nil?
+              s.cnt_match=1 
+            else
+              s.cnt_match+=1 
+            end  
+            begin
+            Page.transaction do
+             s.save!
+             pm.save!
+            end
+           rescue => e
+             next
+           #lo
           end
-         rescue => e
-           next
-         #lo
-        end
+          end
         end
       end
-    end
 
-  end
+    end
 
   def load
     t1=Dop.new
