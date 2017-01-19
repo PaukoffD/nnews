@@ -124,7 +124,7 @@
        <summary><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %></h6></div></summary>
        
 
-       <div class=inline><%= image_tag(a.image, class: 'avatar', :size => "200") %> <%= markdown(a.summary) %></div>
+       <div class=inline><%= image_tag(a.image, class: 'avatar', :size => "200") unless a.image.blank? %> <%= markdown(a.summary) %></div>
        
        </details> 
 	  
@@ -147,7 +147,7 @@
 	 
        <details>
        <summary><%= image_tag(b.source.avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to b.title, nil, 'href' => b.ref , :target => "_blank" , title: b.summary %> </h6></div></summary>
-        <%= image_tag(b.image, class: 'avatar2', :size => "200") %><%= markdown(b.summary) %>
+        <%= image_tag(b.image, class: 'avatar2', :size => "200") unless b.image.blank?  %><%= markdown(b.summary) %>
        </details> 
 	  </td>
 	  

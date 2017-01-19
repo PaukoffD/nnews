@@ -38,4 +38,22 @@ task tags: :environment do
       end
     end
   end
+
+  
+      ttags=[]
+      tags=Tagexcept.all
+      tags.each do |t|
+        ttags<<t.name
+      end
+      pages = Page.order('created_at DESC').where(taggs: "").limit(1000)
+      pages.each do |s|
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+        
+        if s.taggs.blank?
+          for i in (0..2) do
+            s.taggs << s1[i]+" "
+          end
+          s.save
+        end   
+      end
 end

@@ -32,6 +32,28 @@ class PagesController < ApplicationController
   include PagesHelper
 
     def diff
+
+      ttags=[]
+      tags=Tagexcept.all
+      tags.each do |t|
+        ttags<<t.name
+      end
+      pages = Page.order('created_at DESC').where(taggs: "").limit(1000)
+      #lo
+      pages.each do |s|
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+        puts s1
+        #sleep 5
+        if s.taggs.blank?
+          for i in (0..2) do
+            s.taggs << s1[i]+" "
+          end
+          s.save
+        end   
+      end
+#lo
+
+
       corpus=[]
       ttags=[]
       tags=Tagexcept.all
@@ -40,7 +62,7 @@ class PagesController < ApplicationController
       end
       #stemmer= Lingua::Stemmer.new(:language => "ru")
       
-      pages = Page.order('created_at DESC').limit(200)
+      pages = Page.order('created_at DESC').limit(100)
       pages.each do |s|
         s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
         
@@ -105,7 +127,7 @@ class PagesController < ApplicationController
       pages.each do |s|
         spl=s.taggs.split
         mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'")
-        lo
+        #lo
         next  if mpages.length==1
         #binding.pry
         s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
