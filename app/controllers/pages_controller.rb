@@ -45,8 +45,12 @@ class PagesController < ApplicationController
         puts s1
         #sleep 5
         if s.taggs.blank?
-          for i in (0..2) do
-            s.taggs << s1[i]+" "
+          begin
+            for i in (0..2) do
+              s.taggs << s1[i]+" "
+            end
+            rescue => e
+               next
           end
           s.save
         end   
@@ -64,16 +68,20 @@ class PagesController < ApplicationController
       
       pages = Page.order('created_at DESC').limit(100)
       pages.each do |s|
-        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
         
         #puts s1
         s2=''
         s1.each do |p|
          s2<<p+" "
         end 
-        if s.taggs.blank?
-          for i in (0..2) do
-            s.taggs << s1[i]+" "
+        if s.taggs.blank? #если колво меньше 3 исправить
+          begin
+            for i in (0..2) do
+              s.taggs << s1[i]+" "
+            end
+            rescue => e
+               next
           end
           s.save
         end   
@@ -132,8 +140,8 @@ class PagesController < ApplicationController
         mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'").limit(100)
         #lo
         next  if mpages.length==1
-        #binding.pry
-        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+        binding.pry
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
         
         #puts s1
         s2=''
