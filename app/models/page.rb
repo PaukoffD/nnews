@@ -15,6 +15,7 @@
 #  taggs       :string           default("")
 #  cnt_match   :integer          default(0)
 #  flag_match  :boolean          default(FALSE)
+#  dupl        :boolean          default(FALSE)
 #
 # Indexes
 #
@@ -29,4 +30,7 @@ class Page < ActiveRecord::Base
   acts_as_taggable_on :tags
 
   self.per_page = 1000
+
+  scope :nodup, -> { where dupl: false }
+
 end

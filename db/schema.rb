@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118181918) do
+ActiveRecord::Schema.define(version: 20170129151917) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20170118181918) do
     t.string   "taggs",       default: ""
     t.integer  "cnt_match",   default: 0
     t.boolean  "flag_match",  default: false
+    t.boolean  "dupl",        default: false
     t.index ["ref"], name: "index_pages_on_ref", unique: true
   end
 

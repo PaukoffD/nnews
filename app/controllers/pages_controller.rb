@@ -38,11 +38,11 @@ class PagesController < ApplicationController
       tags.each do |t|
         ttags<<t.name
       end
-      pages = Page.order('created_at DESC').where(taggs: "").limit(1000)
+      pages = Page.order('created_at DESC').where(taggs: "").limit(100)
       #lo
       pages.each do |s|
         s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
-        puts s1
+        #puts s1
         #sleep 5
         if s.taggs.blank?
           begin
@@ -72,9 +72,7 @@ class PagesController < ApplicationController
         
         #puts s1
         s2=''
-        s1.each do |p|
-         s2<<p+" "
-        end 
+        s2=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" ).join(" ")
         if s.taggs.blank? #если колво меньше 3 исправить
           begin
             for i in (0..2) do
@@ -85,7 +83,7 @@ class PagesController < ApplicationController
           end
           s.save
         end   
-        
+        #lo
         doc = TfIdfSimilarity::Document.new(s2)  
         corpus << doc  
         #lo   
@@ -140,7 +138,7 @@ class PagesController < ApplicationController
         mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'").limit(100)
         #lo
         next  if mpages.length==1
-        binding.pry
+        #binding.pry
         s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
         
         #puts s1
@@ -412,10 +410,12 @@ end
         each_page.call(doc,page_uri)        # Yield page and URI to the block
 
         # Find all the links on the page
-        hrefs = doc.css('a[href]').map{ |a| a['href'] }
+        hrefs = doc.css('li').css('.title-link').map{ |a| a['href'] if a['href'].to_s.match("news") }.compact
+        #hrefs.map{|a| a.to_s.match("news")}
         #binding.pry
         # Make these URIs, throwing out problem ones like mailto:
         @uris = hrefs.map{ |href| URI.join( page_uri, href ) rescue nil }.compact
+        lo
         #binding.pry
         #puts uris
         #@uris=uris

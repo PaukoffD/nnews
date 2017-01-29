@@ -103,7 +103,7 @@
   <right>       <%= Time.zone.now().strftime("%T") %> </right>
   
   
-    <% @pages.includes(:source).each_slice(2) do |a, b| %>
+    <% @pages.nodup.includes(:source).each_slice(2) do |a, b| %>
  	
     <tr>
      
@@ -112,22 +112,23 @@
 	
 	 
 	 <td><h6><%= a.published.to_time().in_time_zone("Moscow").strftime("%R") %></h6>
-	  
+	   
 	 </td>
 	
 	  
 	 <td> 
+   <span class="badge"><%= a.cnt_match if a.cnt_match>0 %></span>
 	 <% if a.summary.blank? %>
-	 <% a.summary= " " %>
+	   <% a.summary= " " %>
 	 <% end %>
       <details>
-       <summary><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %></h6></div></summary>
-       
+       <summary><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless a.source.avatar.blank? %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %></h6></div></summary>
+      
 
        <div class=inline><%= image_tag(a.image, class: 'avatar', :size => "200") unless a.image.blank? %> <%= markdown(a.summary) %></div>
        
        </details> 
-	  
+	 
 	  </td>
 	  
 	  
@@ -141,12 +142,14 @@
 	  
 	  
 	  <td>
+
+    <span class="badge"><%= b.cnt_match if b.cnt_match>0 %></span>
 	  <% if b.summary.blank? %>
 	 <% b.summary= " " %>
 	 <% end %>
 	 
        <details>
-       <summary><%= image_tag(b.source.avatar.url(:thumb), class: 'avatar1', :size => "20") %> <%=  link_to b.title, nil, 'href' => b.ref , :target => "_blank" , title: b.summary %> </h6></div></summary>
+       <summary><%= image_tag(b.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless b.source.avatar.blank? %> <%=  link_to b.title, nil, 'href' => b.ref , :target => "_blank" , title: b.summary %> </h6></div></summary>
         <%= image_tag(b.image, class: 'avatar2', :size => "200") unless b.image.blank?  %><%= markdown(b.summary) %>
        </details> 
 	  </td>

@@ -302,6 +302,116 @@ end
     puts cnt  
    end  
   puts cnt 
+
+  ttags=[]
+      tags=Tagexcept.all
+      tags.each do |t|
+        ttags<<t.name
+      end
+      pages = Page.order('created_at DESC').where(taggs: "").limit(1000)
+      #lo
+      pages.each do |s|
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+        #puts s1
+        #sleep 5
+        if s.taggs.blank?
+          begin
+            for i in (0..2) do
+              s.taggs << s1[i]+" "
+            end
+            rescue => e
+               next
+          end
+          s.save
+        end   
+      end
+
+  corpus=[]
+      ttags=[]
+      tags=Tagexcept.all
+      tags.each do |t|
+        ttags<<t.name
+      end
+      #stemmer= Lingua::Stemmer.new(:language => "ru")
+      
+     
+      pages = Page.order('created_at DESC').limit(cnt)
+      lo
+      pages.each do |s|
+        spl=s.taggs.split
+        mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'").limit(100)
+        #lo
+        next  if mpages.length==1
+        #binding.pry
+        s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
+        
+        #puts s1
+        s2=''
+        s1.each do |p|
+         s2<<p+" "
+        end 
+       if s.taggs.blank? #если колво меньше 3 исправить
+          begin
+            for i in (0..2) do
+              s.taggs << s1[i]+" "
+            end
+            rescue => e
+               next
+          end
+          s.save
+        end   
+        
+        doc = TfIdfSimilarity::Document.new(s2)  
+        corpus << doc 
+        #lo
+        mpages.each do |ss|
+          doc = TfIdfSimilarity::Document.new(ss.title)  
+          corpus << doc  
+        end
+        break  
+      
+        model = TfIdfSimilarity::TfIdfModel.new(corpus)
+        matrix = model.similarity_matrix
+        #binding.pry
+        puts matrix
+        for i in 0..corpus.length-1 do
+          for j in 0..corpus.length-1 do
+            if matrix[i,j]>0.5 && matrix[i,j]<0.998
+              puts matrix[i,j]
+              puts i
+              puts j
+              puts pages[i].title
+              puts pages[j].title
+              pm=Pagematch.new
+              pm.page_id=pages[i].id
+              pm.match_id=pages[j].id
+              pm.koef=matrix[i,j]
+              s = Page.find(pages[i].id)
+              sss2=Page.find(pages[j].id)
+              s.flag_match=true
+              if s.cnt_match.nil?
+                s.cnt_match=1 
+              else
+                s.cnt_match+=1 
+              end  
+              if s.dupl &&sss2.dupl
+                s.dupl=false
+              else
+                s.dupl=true
+              end    
+              begin
+              Page.transaction do
+               s.save!
+               pm.save!
+              end
+             rescue => e
+               next
+             #lo
+            end
+            end
+          end
+        end
+      end    
   
   #pages = Page.order('created_at DESC').limit(cnt)
   #  pages.each do |s|
