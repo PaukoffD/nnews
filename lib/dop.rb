@@ -1,8 +1,8 @@
 require 'will_paginate/array'
 
 class Dop
-  
-  
+
+
   def proba1
    source = Source.all
    token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
@@ -10,25 +10,25 @@ class Dop
    cnt=0
    source.rss.each do |s|
      url = s.ref
-     
+
     #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
      begin
       feed = Feedjira::Feed.fetch_and_parse url
-      
-      
+
+
       rescue Feedjira::FetchFailure => e
          Rails.logger.error e.message
         next
-     #end   
+     #end
      rescue Feedjira::NoParserAvailable => e
        Rails.logger.error e.message
       next
-     end   
+     end
 
      #lo
-    
+
       feed.entries.each do |entry|
-       
+
        # next unless !@newest_entry || entry.published > @newest_entry.published
        #loa
        @p = Page.new(title: entry.title,
@@ -37,7 +37,7 @@ class Dop
                               source_id: s.id,
                               summary: entry.summary
                               )
-       
+
         s2 = entry.categories[0] if defined? entry.categories
         cat1 = Category.find_by(name: s2)
         #cat1.name="Без категории" if cat1.name=="19"
@@ -63,28 +63,28 @@ class Dop
           end
          rescue => e
            cnt=cnt-1
-         
+
         end
 
 
 
-      end 
-    puts cnt  
-   end  
-  puts cnt 
-  
+      end
+    puts cnt
+   end
+  puts cnt
+
   pages = Page.order('created_at DESC').limit(cnt)
     pages.each do |s|
       #puts s.title
       bot.api.send_message(chat_id: 118319165 , text: "#{s.title} #{s.ref}")
-     
+
     end
   end
-    
+
   end
 
   def load_html
-   
+
   page = Nokogiri::HTML(open('#{s.common1}'))
   link1=page.xpath("#{s.common1}")
   link1.children.each do |link|
@@ -120,9 +120,9 @@ end
         # puts c.name
         #c.save
         #puts //*[@id="new_content"]/div[3]/div/div/div/div/table/tbody/tr[1]/td[1]/div/a
-        #end 
-  #puts page.at_css(".ob_rubrika").text 
-   
+        #end
+  #puts page.at_css(".ob_rubrika").text
+
     #@topics = Topic.order(:created_at).reorder('id DESC').all.page(params[:page])
     #topic=Topic.order(:created_at).reorder('id DESC').last
   #@forum = Forum.find(topic.forum_id)
@@ -134,14 +134,14 @@ end
  # s=link.at_css(".photo_preview")
   #if !s.name="td"
  #  @notice.ref_img=link.at_css(".photo_preview img")['src']
- # end 
+ # end
  # @notice.ref_page=link.at_css(".ob_descr td a")['href']
  # @notice.name=link.at_css(".author").text
-  
+
   #@notice.text=link.at_css("p[3]").text
-  
+
  # @notice.save
- # end 
+ # end
 
  #begin rueconomics
    #page = Nokogiri::HTML(open("http://rueconomics.ru"))
@@ -168,7 +168,7 @@ end
   #end
   # end rueconomics
 #end
-    
+
   def fetch_news
 
 
@@ -182,7 +182,7 @@ end
     end
     @pages = JSON.load @pages
 
-     
+
     @sources = $redis.get('sourses')
     if @sources.nil?
       @sources = Source.all.to_json
@@ -202,15 +202,15 @@ end
          @rel[i]=c['id']
          $redis.hset( @rel ,'rel', c['id'])
          i+=1
-        end 
-     
+        end
+
     @rel=@rel.invert
-      
+
       # Expire the cache, reorder('time DESC').page(params[:page]).very 5 hours
       $redis.expire('rel', 5.hours.to_i)
     end
     #@rel = JSON.load @rel
-    
+
   end
 
   def load_rss
@@ -220,23 +220,23 @@ end
    cnt=0
    source.rss.each do |s|
      url = s.ref
-     
+
     #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
      begin
       feed = Feedjira::Feed.fetch_and_parse url
-      
-      
+
+
       rescue Feedjira::FetchFailure => e
          Rails.logger.error e.message
         next
-     #end   
+     #end
      rescue Feedjira::NoParserAvailable => e
        Rails.logger.error e.message
       next
-     end   
-    
+     end
+
       feed.entries.each do |entry|
-       
+
        # next unless !@newest_entry || entry.published > @newest_entry.published
        #loa
        @p = Page.new(title: entry.title,
@@ -266,7 +266,7 @@ end
       #    entry.summary = ' '
      #    else
      #     @p.summary = entry.summary[0..400]
-     #    
+     #
     #     end
         s2 = entry.categories[0] if defined? entry.categories
         cat1 = Category.find_by(name: s2)
@@ -298,10 +298,10 @@ end
 
 
 
-      end 
-    puts cnt  
-   end  
-  puts cnt 
+      end
+    puts cnt
+   end
+  puts cnt
 
   ttags=[]
       tags=Tagexcept.all
@@ -323,7 +323,7 @@ end
                next
           end
           s.save
-        end   
+        end
       end
 
   corpus=[]
@@ -333,10 +333,10 @@ end
         ttags<<t.name
       end
       #stemmer= Lingua::Stemmer.new(:language => "ru")
-      
-     
+
+
       pages = Page.order('created_at DESC').limit(cnt)
-      lo
+     # lo
       pages.each do |s|
         spl=s.taggs.split
         mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'").limit(100)
@@ -344,12 +344,12 @@ end
         next  if mpages.length==1
         #binding.pry
         s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
-        
+
         #puts s1
         s2=''
         s1.each do |p|
          s2<<p+" "
-        end 
+        end
        if s.taggs.blank? #если колво меньше 3 исправить
           begin
             for i in (0..2) do
@@ -359,17 +359,17 @@ end
                next
           end
           s.save
-        end   
-        
-        doc = TfIdfSimilarity::Document.new(s2)  
-        corpus << doc 
+        end
+
+        doc = TfIdfSimilarity::Document.new(s2)
+        corpus << doc
         #lo
         mpages.each do |ss|
-          doc = TfIdfSimilarity::Document.new(ss.title)  
-          corpus << doc  
+          doc = TfIdfSimilarity::Document.new(ss.title)
+          corpus << doc
         end
-        break  
-      
+        break
+
         model = TfIdfSimilarity::TfIdfModel.new(corpus)
         matrix = model.similarity_matrix
         #binding.pry
@@ -390,15 +390,15 @@ end
               sss2=Page.find(pages[j].id)
               s.flag_match=true
               if s.cnt_match.nil?
-                s.cnt_match=1 
+                s.cnt_match=1
               else
-                s.cnt_match+=1 
-              end  
+                s.cnt_match+=1
+              end
               if s.dupl &&sss2.dupl
                 s.dupl=false
               else
                 s.dupl=true
-              end    
+              end
               begin
               Page.transaction do
                s.save!
@@ -411,15 +411,15 @@ end
             end
           end
         end
-      end    
-  
+      end
+
   #pages = Page.order('created_at DESC').limit(cnt)
   #  pages.each do |s|
       #puts s.title
   #    bot.api.send_message(chat_id: 118319165 , text: "#{s.title} #{s.ref}")
-     
+
   #  end
   end
-    
+
   end
-end  
+end

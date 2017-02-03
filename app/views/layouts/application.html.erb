@@ -5,14 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <%= yield(:search) %>
   <title>Новости</title>
-  
+
  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
-   
+
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">  
-   
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
 </head>
 <body>
  <div class="container">
@@ -25,26 +25,26 @@
 <% end %>
 
 <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
-<style> 
+<style>
 @media screen and (max-width: 480px) {
- 
+
   body {
     margin: 0;
   }
- 
+
   #header .inner {
     padding-top: 5px;
     padding-bottom: 5px;
   }
- 
+
   #header .inner, #content, #nav, #sidebar {
     margin-bottom: 5px;
   }
- 
+
   #nav ul {
     padding: 5px 7px;
   }
- 
+
 }
 </style>
 
@@ -54,11 +54,11 @@
 
           <div class="fluidcontainer">
               <%= yield %>
-			  
+
 			    <%= debug(params) if Rails.env.development? %>
           </div>
 
-     
+
 
 
 </body>

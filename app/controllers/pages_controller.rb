@@ -53,7 +53,7 @@ class PagesController < ApplicationController
                next
           end
           s.save
-        end   
+        end
       end
 #lo
 
@@ -65,11 +65,11 @@ class PagesController < ApplicationController
         ttags<<t.name
       end
       #stemmer= Lingua::Stemmer.new(:language => "ru")
-      
+
       pages = Page.order('created_at DESC').limit(100)
       pages.each do |s|
         s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
-        
+
         #puts s1
         s2=''
         s2=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" ).join(" ")
@@ -82,15 +82,16 @@ class PagesController < ApplicationController
                next
           end
           s.save
-        end   
+        end
         #lo
-        doc = TfIdfSimilarity::Document.new(s2)  
-        corpus << doc  
-        #lo   
+        doc = TfIdfSimilarity::Document.new(s2)
+        puts doc
+        corpus << doc
+        #lo
       end
       model = TfIdfSimilarity::TfIdfModel.new(corpus)
       matrix = model.similarity_matrix
-      puts matrix
+      #puts matrix
       for i in 0..99 do
         for j in 0..99 do
           if matrix[i,j]>0.5 && matrix[i,j]<0.998
@@ -106,10 +107,10 @@ class PagesController < ApplicationController
             s = Page.find(pages[i].id)
             s.flag_match=true
             if s.cnt_match.nil?
-              s.cnt_match=1 
+              s.cnt_match=1
             else
-              s.cnt_match+=1 
-            end  
+              s.cnt_match+=1
+            end
 
             begin
             Page.transaction do
@@ -123,7 +124,7 @@ class PagesController < ApplicationController
 
 
 
-            
+
             #lo
           end
         end
@@ -140,28 +141,28 @@ class PagesController < ApplicationController
         next  if mpages.length==1
         #binding.pry
         s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
-        
+
         #puts s1
         s2=''
         s1.each do |p|
          s2<<p+" "
-        end 
+        end
         if s.taggs.blank?
           for i in (0..2) do
             s.taggs << s1[i]+" "
           end
           s.save
-        end   
-        
-        doc = TfIdfSimilarity::Document.new(s2)  
-        corpus << doc 
+        end
+
+        doc = TfIdfSimilarity::Document.new(s2)
+        corpus << doc
         #lo
         mpages.each do |ss|
-          doc = TfIdfSimilarity::Document.new(ss.taggs)  
-          corpus << doc  
+          doc = TfIdfSimilarity::Document.new(ss.taggs)
+          corpus << doc
         end
-        break  
-      
+        break
+
         model = TfIdfSimilarity::TfIdfModel.new(corpus)
         matrix = model.similarity_matrix
         #binding.pry
@@ -181,10 +182,10 @@ class PagesController < ApplicationController
               s = Page.find(pages[i].id)
               s.flag_match=true
               if s.cnt_match.nil?
-                s.cnt_match=1 
+                s.cnt_match=1
               else
-                s.cnt_match+=1 
-              end  
+                s.cnt_match+=1
+              end
               begin
               Page.transaction do
                s.save!
@@ -229,26 +230,26 @@ Telegram::Bot::Client.run(token) do |bot|
     end
   end
 end
-  
+
   def analyze
-   
+
   end
 
  def tmp
     #source = Source.all
    # source.each do |s|
-      
+
       #  ss=Sourcehtml.first
        page = Nokogiri::HTML(open("http://rueconomics.ru"))
 
        link1=page.xpath('//*[contains(@class,"left_news_post")]')
-       
+
        link1.each do |link|
-        
-       
+
+
         #loa
         title=link.at_css("h3 a").text if defined? link.at_css("h3 a").text1
-        
+
         next if title.nil?
         pg=Page.new
         pg.title=title
@@ -259,14 +260,14 @@ end
         # loa
        # pg.source_id=ss.source_id
         pg.save
-      
-       end   
-      end     
 
-  
+       end
+      end
 
- 
-  
+
+
+
+
   def search_tags1
     render :search_tags
      @tag = params[:tag]
@@ -291,10 +292,10 @@ end
 
   def html
       @sources = Source.where(html: true)
-   
+
   end
 
- 
+
 
   def index
 
@@ -322,8 +323,8 @@ end
     else
       @pages = Page.all.order('published DESC').page(params[:page])
     end
-   
-  
+
+
    # loa
    @categories = Category.all.order('count DESC').limit(50)
    @search = Page.search(params[:q])
@@ -333,7 +334,46 @@ end
 
   def redis
    @source = Source.all
-   fetch_news
+    @pages = $redis.get('pages')
+
+    if @pages.nil?
+      @pages = Page.order('published DESC').page(params[:page]).to_json
+
+      $redis.set('pages', @pages)
+      # Expire the cache, reorder('time DESC').page(params[:page]).very 5 hours
+      $redis.expire('pages', 17.minutes.to_i)
+    end
+    @pages = JSON.load @pages
+
+
+    @sources = $redis.get('sourses')
+    if @sources.nil?
+      @sources = Source.all.to_json
+      $redis.set('sources', @sources)
+      # Expire the cache, reorder('time DESC').page(params[:page]).very 5 hours
+      $redis.expire('sources', 5.hours.to_i)
+    end
+
+    @sources = JSON.load @sources
+
+    @rel = $redis.hget(@rel,'rel')
+
+    if @rel.nil?
+        @rel=Hash.new
+        i=0
+        @sources.each do |c|
+         @rel[i]=c['id']
+         $redis.hset( @rel ,'rel', c['id'])
+         i+=1
+        end
+
+    @rel=@rel.invert
+
+      # Expire the cache, reorder('time DESC').page(params[:page]).very 5 hours
+      $redis.expire('rel', 5.hours.to_i)
+    end
+    #@rel = JSON.load @rel
+
   end
 
   def tag_cloud
@@ -355,9 +395,9 @@ end
   def edit
   end
 
-  
 
-  
+
+
 
   def create
     @page = Page.new(page_params)
