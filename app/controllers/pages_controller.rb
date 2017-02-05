@@ -72,15 +72,19 @@ class PagesController < ApplicationController
 
         #puts s1
         s2=''
-        s2=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" ).join(" ")
+       for i in (0..s1.length-1) do
+              break if i>2
+              s2 << s1[i]+" "
+            end
+        
         if s.taggs.blank? #если колво меньше 3 исправить
-          begin
-            for i in (0..2) do
+          
+            for i in (0..s1.length-1) do
+              break if i>2
               s.taggs << s1[i]+" "
             end
-            rescue => e
-               next
-          end
+           
+         
           s.save
         end
         #lo
@@ -132,7 +136,7 @@ class PagesController < ApplicationController
       corpus=[]
       puts corpus
 
-      sleep 5
+      #sleep 5
       pages = Page.order('created_at DESC').limit(101)
       pages.each do |s|
         spl=s.taggs.split

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :tagexcepts
   resources :sources do
     resources :infos
-  end  
+  end
   resources :pages
   resources :sourcehtmls
 

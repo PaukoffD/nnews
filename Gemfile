@@ -70,6 +70,7 @@ gem 'telegram_bot'
 gem 'telegram-bot-ruby'
 gem "ruby-stemmer"
 gem "tf-idf-similarity"
+gem "bugsnag"
 
 group :development, :test do
   gem 'sqlite3'
