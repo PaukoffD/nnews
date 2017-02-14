@@ -204,242 +204,250 @@ class Dop
 
   end
 
-  def load_rss
-   source = Source.all
-   token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
-   Telegram::Bot::Client.run(token) do |bot|
-   cnt=0
-   source.rss.each do |s|
-     url = s.ref
+    def load_rss
+     source = Source.all
+     token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
+     Telegram::Bot::Client.run(token) do |bot|
+     cnt=0
+     source.rss.each do |s|
+       url = s.ref
 
-    #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
-     begin
-      feed = Feedjira::Feed.fetch_and_parse url
+      #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
+       begin
+        feed = Feedjira::Feed.fetch_and_parse url
 
 
-      rescue Feedjira::FetchFailure => e
+        rescue Feedjira::FetchFailure => e
+           Rails.logger.error e.message
+          next
+       #end
+       rescue Feedjira::NoParserAvailable => e
          Rails.logger.error e.message
         next
-     #end
-     rescue Feedjira::NoParserAvailable => e
-       Rails.logger.error e.message
-      next
+       end
+
+        feed.entries.each do |entry|
+
+         # next unless !@newest_entry || entry.published > @newest_entry.published
+         #loa
+         @p = Page.new(title: entry.title,
+                                published: entry.published,
+                                ref: entry.url,
+                                source_id: s.id,
+                                summary: entry.summary
+                                )
+         #@p.title = entry.title
+          #@p.ref = entry.url
+          #@p.time = entry.published.to_datetime
+          #@p.source_id = s.id
+          #@p.image=entry.image if defined? entry.image
+         # s2 = entry.categories[0] if defined? entry.category
+          #cat1 = Category.find_by(name: s2) || Category.new
+          #cat1.name="Без категории" if cat1.id==19
+          #cat1.save
+          #if cat1.blank?
+          #   c = Category.new
+         #    c.name = entry.categories[0]
+          #   c.name=="Без категории" if c.name==nil
+         #    c.save
+         #    cat1 = Category.last
+        #   end
+        #  @p.category_id = cat1.id
+       #   if entry.summary.blank?
+        #    entry.summary = ' '
+       #    else
+       #     @p.summary = entry.summary[0..400]
+       #
+      #     end
+          s2 = entry.categories[0] if defined? entry.categories
+          cat1 = Category.find_by(name: s2)
+          #cat1.name="Без категории" if cat1.name=="19"
+          #cat1.save
+
+            if cat1.blank?
+               c = Category.new
+               c.name = s2
+               c.name = "Без категории" if c.name==nil
+               c.save
+               cat1 = Category.last
+             end
+          @p.category_id = cat1.id
+         @p.image=entry.image if defined? entry.image
+           ActsAsTaggableOn.delimiter = [' ', ',']
+          #loa
+          @p.tag_list.add(@p.title, parse: true)
+
+          begin
+            Page.transaction do
+              cnt=cnt+1
+              @p.save!
+            end
+           rescue => e
+             cnt=cnt-1
+           #lo
+          end
+
+
+
+        end
+      puts cnt
+     end
+    puts cnt
+    @cnt=cnt
+    ttaggs
+
+    ttags=[]
+    tags=Tagexcept.all
+    tags.each do |t|
+      ttags<<t.name
+    end
+    corpus=[]
+    pages = Page.order('created_at DESC').limit(cnt)
+       # lo
+    pages.each do |s|
+      corpus=[]
+      spl=s.taggs.split
+      if spl[2].nil?
+        mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%'")
+      elsif  spl[1].nil?
+        mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%'")
+      elsif  spl[0].nil?
+        next
+      else
+        mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'")
+      end
+          #binding.pry
+      next  if mpages.length==1
+          #binding.pry
+      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
+  #lo
+      s2=''
+      for i in (0..s1.length-1) do
+              #  break if i>2
+        s2 << s1[i]+" "
+      end
+
+      if s.taggs.blank? #если колво меньше 3 исправить
+
+        for i in (0..s1.length-1) do
+          break if i>2
+            s.taggs << s1[i]+" "
+        end
+
+
+        s.save
+      end
+
+          #doc = TfIdfSimilarity::Document.new(s2)
+          #corpus << doc
+          #lo
+      mpages.each do |ss|
+        #ss1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
+        #ss2=''
+        #for i in (0..s1.length-1) do
+              #  break if i>2
+        #  s2 << s1[i]+" "
+        #end
+        doc = TfIdfSimilarity::Document.new(ss.taggs)
+        corpus << doc
+        #binding.pry
+      end
+
+
+      model = TfIdfSimilarity::TfIdfModel.new(corpus)
+      matrix = model.similarity_matrix
+
+          #binding.pry
+      puts matrix.count
+
+    for i in 0..corpus.length-1 do
+        for j in 0..corpus.length-1 do
+          if matrix[i,j]>0.5 && matrix[i,j]<0.998
+            puts matrix[i,j]
+            puts i
+            puts j
+            puts mpages[i].title
+            puts mpages[j].title
+            q=Pagematch.find_by(page_id: mpages[i].title)
+            if q.nil?
+              pm=Pagematch.new
+              pm.page_id=mpages[i].id
+              pm.match_id=mpages[j].id
+              pm.koef=matrix[i,j]
+              sss1 = Page.find(mpages[i].id)
+              sss2=Page.find(mpages[j].id)
+              sss1.flag_match=true
+              if sss1.cnt_match.nil?
+                sss1.cnt_match=1
+              else
+                sss1.cnt_match+=1
+              end
+              sss1.dupl=false
+              sss2.dupl=true
+              #lo
+              if sss1.dupl && !sss2.dupl
+              #  sss1.dupl=false
+              #else
+              #  sss1.dupl=true
+              #end
+              begin
+                Page.transaction do
+                sss1.save!
+                pm.save!
+              end
+              rescue => e
+                 next
+               #lo
+
+              end
+            else
+
+
+
+
+
+            end
+          end
+        end
+
+    #pages = Page.order('created_at DESC').limit(cnt)
+    #  pages.each do |s|
+        #puts s.title
+    #    bot.api.send_message(chat_id: 118319165 , text: "#{s.title} #{s.ref}")
+        end
+    end
+    end
      end
 
-      feed.entries.each do |entry|
-
-       # next unless !@newest_entry || entry.published > @newest_entry.published
-       #loa
-       @p = Page.new(title: entry.title,
-                              published: entry.published,
-                              ref: entry.url,
-                              source_id: s.id,
-                              summary: entry.summary
-                              )
-       #@p.title = entry.title
-        #@p.ref = entry.url
-        #@p.time = entry.published.to_datetime
-        #@p.source_id = s.id
-        #@p.image=entry.image if defined? entry.image
-       # s2 = entry.categories[0] if defined? entry.category
-        #cat1 = Category.find_by(name: s2) || Category.new
-        #cat1.name="Без категории" if cat1.id==19
-        #cat1.save
-        #if cat1.blank?
-        #   c = Category.new
-       #    c.name = entry.categories[0]
-        #   c.name=="Без категории" if c.name==nil
-       #    c.save
-       #    cat1 = Category.last
-      #   end
-      #  @p.category_id = cat1.id
-     #   if entry.summary.blank?
-      #    entry.summary = ' '
-     #    else
-     #     @p.summary = entry.summary[0..400]
-     #
-    #     end
-        s2 = entry.categories[0] if defined? entry.categories
-        cat1 = Category.find_by(name: s2)
-        #cat1.name="Без категории" if cat1.name=="19"
-        #cat1.save
-
-          if cat1.blank?
-             c = Category.new
-             c.name = s2
-             c.name = "Без категории" if c.name==nil
-             c.save
-             cat1 = Category.last
-           end
-        @p.category_id = cat1.id
-       @p.image=entry.image if defined? entry.image
-         ActsAsTaggableOn.delimiter = [' ', ',']
-        #loa
-        @p.tag_list.add(@p.title, parse: true)
-
-        begin
-          Page.transaction do
-            cnt=cnt+1
-            @p.save!
-          end
-         rescue => e
-           cnt=cnt-1
-         #lo
-        end
-
-
-
-      end
-    puts cnt
-   end
-  puts cnt
-  @cnt=cnt
-  ttaggs
-
-  ttags=[]
-  tags=Tagexcept.all
-  tags.each do |t|
-    ttags<<t.name
-  end
-  corpus=[]
-  pages = Page.order('created_at DESC').limit(cnt)
-     # lo
-  pages.each do |s|
-    corpus=[]
-    spl=s.taggs.split
-    if spl[2].nil?
-      mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%'")
-    elsif  spl[1].nil?
-      mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%'")
-    elsif  spl[0].nil?
-      next
-    else
-      mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'")
-    end
-        #binding.pry
-    next  if mpages.length==1
-        #binding.pry
-    s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
-#lo
-    s2=''
-    for i in (0..s1.length-1) do
-            #  break if i>2
-      s2 << s1[i]+" "
-    end
-
-    if s.taggs.blank? #если колво меньше 3 исправить
-
-      for i in (0..s1.length-1) do
-        break if i>2
-          s.taggs << s1[i]+" "
-      end
-
-
-      s.save
-    end
-
-        #doc = TfIdfSimilarity::Document.new(s2)
-        #corpus << doc
-        #lo
-    mpages.each do |ss|
-      #ss1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
-      #ss2=''
-      #for i in (0..s1.length-1) do
-            #  break if i>2
-      #  s2 << s1[i]+" "
-      #end
-      doc = TfIdfSimilarity::Document.new(ss.taggs)
-      corpus << doc
-      #binding.pry
-    end
-        
-
-    model = TfIdfSimilarity::TfIdfModel.new(corpus)
-    matrix = model.similarity_matrix
-
-        #binding.pry
-    puts matrix.count
-        
-    for i in 0..corpus.length-1 do
-      for j in 0..corpus.length-1 do
-        if matrix[i,j]>0.5 && matrix[i,j]<0.998
-          puts matrix[i,j]
-          puts i
-          puts j
-          puts mpages[i].title
-          puts mpages[j].title
-              #lo
-          pm=Pagematch.new
-          pm.page_id=mpages[i].id
-          pm.match_id=mpages[j].id
-          pm.koef=matrix[i,j]
-          s = Page.find(mpages[i].id)
-          sss2=Page.find(mpages[j].id)
-          s.flag_match=true
-            if s.cnt_match.nil?
-              s.cnt_match=1
-            else
-              s.cnt_match+=1
-            end
-            if s.dupl &&sss2.dupl
-              s.dupl=false
-            else
-              s.dupl=true
-            end
-            begin
-              Page.transaction do
-              s.save!
-              pm.save!
-            end
-            rescue => e
-               next
-             #lo
-            
-            end
-          end
-        end
-      end
-
-  #pages = Page.order('created_at DESC').limit(cnt)
-  #  pages.each do |s|
-      #puts s.title
-  #    bot.api.send_message(chat_id: 118319165 , text: "#{s.title} #{s.ref}")
-
-   end
-  end
 
   end
 
-private
+  private
   def ttaggs
-  ttags=[]
-  tags=Tagexcept.all
-  tags.each do |t|
-    ttags<<t.name
-  end
-  pages = Page.order('created_at DESC').where(taggs: "").limit(@cnt)
-  #binding.pry
-  pages.each do |s|
-    s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
-    s2=''
-    for i in (0..s1.length-1) do
-      break if i>2
-      s2 << s1[i]+" "
+    ttags=[]
+    tags=Tagexcept.all
+    tags.each do |t|
+      ttags<<t.name
     end
-
-    if s.taggs.blank? #если колво меньше 3 исправить
-
+    pages = Page.order('created_at DESC').where(taggs: "").limit(@cnt)
+    #binding.pry
+    pages.each do |s|
+      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+      s2=''
       for i in (0..s1.length-1) do
         break if i>2
-        s.taggs << s1[i]+" "
+        s2 << s1[i]+" "
+      end
+      if s.taggs.blank? #если колво меньше 3 исправить
+        for i in (0..s1.length-1) do
+          break if i>2
+          s.taggs << s1[i]+" "
+          #binding.pry
+        end
+        s.save
         #binding.pry
       end
-
-
-          s.save
-          #binding.pry
     end
-  end
   end
 
 end
