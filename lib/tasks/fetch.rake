@@ -58,8 +58,8 @@ task fetch: :environment do
 
     end  
 
-   
- puts cnt
+ cnt +=cnt
+    puts "колво в фид  " ,cnt
  @cnt=cnt
  ttags=[]
  tags=Tagexcept.all
@@ -93,7 +93,7 @@ task fetch: :environment do
    ttags<<t.name
  end
  corpus=[]
- pages = Page.order('created_at DESC').limit(cnt)
+ pages = Page.order('created_at DESC').limit(@cnt)
  # lo
  pages.each do |s|
    corpus=[]
@@ -153,7 +153,7 @@ task fetch: :environment do
   
    for i in 0..corpus.length-1 do
      for j in 0..corpus.length-1 do
-       if matrix[i,j]>0.5 && matrix[i,j]<0.998
+       if matrix[i,j]>0.6 && matrix[i,j]<0.998 && i<j
          puts matrix[i,j]
          puts i
          puts j
@@ -203,15 +203,18 @@ task fetch: :environment do
        end
      end
    end
+   puts s.title
+   bot.api.send_message(chat_id: "@paukoffnews" , text: "#{s.published.to_time().in_time_zone("Moscow").strftime("%R")} #{s.title} #{s.ref}")
  end
-#end
-  pages = Page.order('published DESC').limit(cnt)
-    pages.nodup.each do |s|
-      #puts s.title
-      bot.api.send_message(chat_id: "@paukoffnews" , text: "#{s.published.to_time().in_time_zone("Moscow").strftime("%R")} #{s.title} #{s.ref}")
+#puts cnt
+#  pages = Page.order('published DESC').limit(@cnt)
+ #   pages.nodup.each do |s|
+#      puts @cnt
+#      puts s.title
+#      bot.api.send_message(chat_id: "@paukoffnews" , text: "#{s.published.to_time().in_time_zone("Moscow").strftime("%R")} #{s.title} #{s.ref}")
       #sleep 15
       #loa
-    end
+ #   end
  end
 
 

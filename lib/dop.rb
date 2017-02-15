@@ -362,7 +362,7 @@ class Dop
 
     for i in 0..corpus.length-1 do
         for j in 0..corpus.length-1 do
-          if matrix[i,j]>0.5 && matrix[i,j]<0.998
+          if matrix[i,j]>0.5 && matrix[i,j]<0.998 && i<j
             puts matrix[i,j]
             puts i
             puts j
@@ -385,28 +385,29 @@ class Dop
               sss1.dupl=false
               sss2.dupl=true
               #lo
-              if sss1.dupl && !sss2.dupl
+              #if sss1.dupl && !sss2.dupl
               #  sss1.dupl=false
               #else
               #  sss1.dupl=true
               #end
               begin
                 Page.transaction do
-                sss1.save!
-                pm.save!
-              end
+                  sss1.save!
+                  sss2.save!
+                  pm.save!
+                end
               rescue => e
                  next
                #lo
 
               end
-            else
+            #else
 
 
 
 
 
-            end
+            #end
           end
         end
 
