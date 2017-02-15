@@ -59,7 +59,7 @@ task fetch: :environment do
     end  
 
    
-    puts cnt
+ puts cnt
  @cnt=cnt
  ttags=[]
  tags=Tagexcept.all
@@ -149,7 +149,7 @@ task fetch: :environment do
    matrix = model.similarity_matrix
   
    #binding.pry
-   puts matrix.count
+   #puts matrix.count
   
    for i in 0..corpus.length-1 do
      for j in 0..corpus.length-1 do
@@ -176,7 +176,7 @@ task fetch: :environment do
            sss1.dupl=false
            sss2.dupl=true
            #lo
-           if sss1.dupl && !sss2.dupl
+           #if sss1.dupl && !sss2.dupl
              #  sss1.dupl=false
              #else
              #  sss1.dupl=true
@@ -184,6 +184,7 @@ task fetch: :environment do
              begin
                Page.transaction do
                  sss1.save!
+                 sss2.save!
                  pm.save!
                end
              rescue => e
@@ -191,13 +192,13 @@ task fetch: :environment do
                #lo
             
              end
-           else
+           #else
           
           
           
           
           
-           end
+           #end
          end
        end
      end
