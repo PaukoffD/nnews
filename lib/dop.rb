@@ -320,7 +320,7 @@ class Dop
       next  if mpages.length==1
           #binding.pry
       s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
-  #lo
+  lo
       s2=''
       for i in (0..s1.length-1) do
               #  break if i>2

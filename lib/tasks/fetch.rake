@@ -55,11 +55,11 @@ task fetch: :environment do
            cnt=cnt-1
          
         end
-
+       puts "колво в фид  " ,cnt
     end  
 
- cnt +=cnt
-    puts "колво в фид  " ,cnt
+ #cnt +=cnt
+ puts cnt
  @cnt=cnt
  ttags=[]
  tags=Tagexcept.all
@@ -69,7 +69,7 @@ task fetch: :environment do
  pages = Page.order('created_at DESC').where(taggs: "").limit(@cnt)
  #binding.pry
  pages.each do |s|
-   s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+   s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\']/, "").downcase.split-ttags, :language => "ru" )
    s2=''
    for i in (0..s1.length-1) do
      break if i>2
@@ -99,13 +99,13 @@ task fetch: :environment do
    corpus=[]
    spl=s.taggs.split
    if spl[2].nil?
-     mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%'")
+     mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%'").order('created_at DESC').limit(99)
    elsif  spl[1].nil?
-     mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%'")
+     mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%'").order('created_at DESC').limit(99)
    elsif  spl[0].nil?
      next
    else
-     mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'")
+     mpages=Page.order('created_at ASC').where("taggs LIKE '%#{spl[0]}%' or taggs LIKE '%#{spl[1]}%' or taggs LIKE '%#{spl[2]}%'").order('created_at DESC').limit(99)
    end
    #binding.pry
    next  if mpages.length==1
@@ -203,18 +203,16 @@ task fetch: :environment do
        end
      end
    end
-   puts s.title
-   bot.api.send_message(chat_id: "@paukoffnews" , text: "#{s.published.to_time().in_time_zone("Moscow").strftime("%R")} #{s.title} #{s.ref}")
  end
-#puts cnt
-#  pages = Page.order('published DESC').limit(@cnt)
- #   pages.nodup.each do |s|
-#      puts @cnt
-#      puts s.title
-#      bot.api.send_message(chat_id: "@paukoffnews" , text: "#{s.published.to_time().in_time_zone("Moscow").strftime("%R")} #{s.title} #{s.ref}")
+puts cnt
+  pages = Page.order('published DESC').limit(@cnt)
+    pages.nodup.each do |s|
+      puts @cnt
+      puts s.title
+      bot.api.send_message(chat_id: "@paukoffnews" , text: "#{s.published.to_time().in_time_zone("Moscow").strftime("%R")} #{s.title} #{s.ref}")
       #sleep 15
       #loa
- #   end
+    end
  end
 
 
