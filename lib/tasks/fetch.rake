@@ -55,7 +55,7 @@ task fetch: :environment do
            cnt=cnt-1
          
         end
-       puts "колво в фид  " ,cnt
+    #   puts "колво в фид  " ,cnt
     end  
 
  #cnt +=cnt

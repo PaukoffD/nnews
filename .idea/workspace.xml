@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0848c50f-5287-46ca-8a47-69b05e85dea9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/dop.rb" afterPath="$PROJECT_DIR$/lib/dop.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/tasks/fetch.rake" afterPath="$PROJECT_DIR$/lib/tasks/fetch.rake" />
     </list>
     <ignored path="$PROJECT_DIR$/.bundle/" />
@@ -80,8 +78,8 @@
       <file leaf-file-name="fetch.rake" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/tasks/fetch.rake">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="71" column="53" lean-forward="false" selection-start-line="71" selection-start-column="53" selection-end-line="71" selection-end-column="53" />
+            <state relative-caret-position="225">
+              <caret line="57" column="5" lean-forward="false" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -513,12 +511,12 @@
       <workItem from="1487060572126" duration="1952000" />
       <workItem from="1487071077824" duration="1284000" />
       <workItem from="1487145192992" duration="7361000" />
-      <workItem from="1487175964751" duration="8495000" />
+      <workItem from="1487175964751" duration="8689000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28825000" />
+    <option name="totallyTimeSpent" value="29019000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1600" height="864" extended-state="6" />
@@ -834,8 +832,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/tasks/fetch.rake">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="71" column="53" lean-forward="false" selection-start-line="71" selection-start-column="53" selection-end-line="71" selection-end-column="53" />
+        <state relative-caret-position="225">
+          <caret line="57" column="5" lean-forward="false" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
           <folding />
         </state>
       </provider>
