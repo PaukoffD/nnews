@@ -230,12 +230,13 @@ class Dop
 
          # next unless !@newest_entry || entry.published > @newest_entry.published
          #loa
-         @p = Page.new(title: entry.title,
+         @p = Page.new(title: trunc(entry.title),
                                 published: entry.published,
                                 ref: entry.url,
                                 source_id: s.id,
-                                summary: entry.summary
+                                summary: trunc_summary(entry.summary)
                                 )
+         lo
          #@p.title = entry.title
           #@p.ref = entry.url
           #@p.time = entry.published.to_datetime
@@ -320,7 +321,7 @@ class Dop
       next  if mpages.length==1
           #binding.pry
       s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\-\']/, "").downcase.split-ttags, :language => "ru" )
-  lo
+  #lo
       s2=''
       for i in (0..s1.length-1) do
               #  break if i>2
@@ -449,6 +450,14 @@ class Dop
         #binding.pry
       end
     end
+  end
+
+  def trunc(text)
+    text.gsub(/\<[\/]*a[^\>]*\>/, "")
+  end
+
+  def trunc_summary(text)
+    text.gsub(/&nbsp<a.+>(.*)<\/a>&nbsp/, "")
   end
 
 end

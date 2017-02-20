@@ -19,4 +19,9 @@ module ApplicationHelper
 
     markdown.render(text).html_safe
   end
+
+  def trunc(text)
+    text.gsub(/\<[\/]*a[^\>]*\>/, "")
+  end
+
 end

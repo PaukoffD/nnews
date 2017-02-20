@@ -5,8 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <%= yield(:search) %>
   <title>Новости</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
 
- <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 
@@ -24,29 +26,7 @@
     </div>
 <% end %>
 
-<meta name="viewport" content="initial-scale=1, maximum-scale=1" />
-<style>
-@media screen and (max-width: 480px) {
 
-  body {
-    margin: 0;
-  }
-
-  #header .inner {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  #header .inner, #content, #nav, #sidebar {
-    margin-bottom: 5px;
-  }
-
-  #nav ul {
-    padding: 5px 7px;
-  }
-
-}
-</style>
 
 
 
