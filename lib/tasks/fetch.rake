@@ -151,55 +151,72 @@ task fetch: :environment do
   
    #binding.pry
    #puts matrix.count
-  
+
    for i in 0..corpus.length-1 do
      for j in 0..corpus.length-1 do
-       if matrix[i,j]>0.6 && matrix[i,j]<0.998 && i<j
+       if matrix[i,j]>0.65 && matrix[i,j]<0.998 && i<j
          puts matrix[i,j]
          puts i
          puts j
          puts mpages[i].title
          puts mpages[j].title
-         q=Pagematch.find_by(page_id: mpages[i].title)
+         q=Pagematch.find_by(page_id: mpages[i].id)
+         #lo
          if q.nil?
            pm=Pagematch.new
            pm.page_id=mpages[i].id
            pm.match_id=mpages[j].id
            pm.koef=matrix[i,j]
            sss1 = Page.find(mpages[i].id)
-           sss2=Page.find(mpages[j].id)
+           sss2 = Page.find(mpages[j].id)
            sss1.flag_match=true
+           sss2.flag_match=true
            if sss1.cnt_match.nil?
              sss1.cnt_match=1
-           else
-             sss1.cnt_match+=1
            end
            sss1.dupl=false
            sss2.dupl=true
            #lo
            #if sss1.dupl && !sss2.dupl
-             #  sss1.dupl=false
-             #else
-             #  sss1.dupl=true
-             #end
-             begin
-               Page.transaction do
-                 sss1.save!
-                 sss2.save!
-                 pm.save!
-               end
-             rescue => e
-               next
-               #lo
-            
-             end
+           #  sss1.dupl=false
            #else
-          
-          
-          
-          
-          
+           #  sss1.dupl=true
            #end
+           begin
+             Page.transaction do
+               sss1.save!
+               sss2.save!
+               pm.save!
+             end
+           rescue => e
+             next
+           end
+         else
+           #ind=Pagematch.where(page_id: q.page_id).pluck(:match_id)
+           sss1 = Page.find(q.page_id)
+           #lo
+           sss2 = Page.find(mpages[j].id)
+           sss1.flag_match=true
+           sss2.flag_match=true
+           sss1.cnt_match +=1
+           puts sss1.cnt_match, "increase 1"
+           sss1.dupl=false
+           sss2.dupl=true
+           #lo
+           #if sss1.dupl && !sss2.dupl
+           #  sss1.dupl=false
+           #else
+           #  sss1.dupl=true
+           #end
+           begin
+             Page.transaction do
+               sss1.save!
+               sss2.save!
+               q.save!
+             end
+           rescue => e
+             next
+           end
          end
        end
      end
