@@ -9,20 +9,13 @@ task fetch: :environment do
  puts "RSS load" 
  source = Source.all
  token= '328736940:AAE9h5HdxT1897syuj5-xZTxOecG8mWYQ0s'
- conn = Faraday.new do |conn|
-   conn.request.options.timeout = 20
- end
-
  Telegram::Bot::Client.run(token) do |bot|
  cnt=0
    source.rss.each do |s|
     url = s.ref
     puts s.name, s.ref
     begin
-      response = conn.get(url)
-      xml = response.body
-
-    feed = Feedjira::Feed.fetch_and_parse xml
+    feed = Feedjira::Feed.fetch_and_parse url
     
     
     rescue Feedjira::FetchFailure => e
