@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   root 'pages#index'
   get 'loadnews', to: 'pages#load'
   get 'analyze', to: 'pages#analyze'
+  get 'addwindow', to: 'pages#addwindow'
   get 'category/:category', to: 'pages#index', as: :category
   get 'ss', to: 'pages#index'
   get 'data', to: 'pages#index', as: :data

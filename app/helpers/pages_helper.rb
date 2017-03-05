@@ -9,11 +9,11 @@ module PagesHelper
       begin
         feed = Feedjira::Feed.fetch_and_parse url
       rescue Feedjira::FetchFailure => e
-        Rails.logger.error e.message
+        Rails.logger.error e.message, a.ref
         puts a.ref
         next
       rescue Feedjira::NoParserAvailable => e
-        Rails.logger.error e.message
+        Rails.logger.error e.message, a.ref, "no parser available"
         puts a.ref, "no parser available"
         next
       end

@@ -2,6 +2,7 @@ require 'rubygems'
 require 'telegram/bot'
 require 'lingua/stemmer'
 require 'matrix'
+require 'bugsnag'
 
 
 task fetch: :environment do

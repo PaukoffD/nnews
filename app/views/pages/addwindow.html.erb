@@ -1,0 +1,40 @@
+<tr>
+
+  <td><h6><%= @page.published.to_time().in_time_zone("Moscow").strftime("%R") %></h6></td>
+
+
+  <td>
+
+    <% @page.summary= " " if @page.summary.blank? %>
+
+    <details>
+      <summary><%= image_tag(@page.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless @page.source.avatar.blank? %> <%=  link_to @page.title, nil, 'href' => @page.ref , :target => "_blank" , title: @page.summary %></h6></div></summary>
+
+
+      <div class=inline><%= image_tag(@page.image, class: 'avatar', :size => "200") unless @page.image.blank? %> <%= markdown(@page.summary) %></div>
+
+    </details>
+
+  </td>
+</tr>
+<% @mpages.includes(:source).each do |a| %>
+    <tr>
+
+      <td><h6><%= a.published.to_time().in_time_zone("Moscow").strftime("%R") %></h6></td>
+
+
+      <td>
+
+        <% a.summary= " " if a.summary.blank? %>
+
+        <details>
+          <summary><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless a.source.avatar.blank? %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %></h6></div></summary>
+
+
+          <div class=inline><%= image_tag(a.image, class: 'avatar', :size => "200") unless a.image.blank? %> <%= markdown(a.summary) %></div>
+
+        </details>
+
+      </td>
+    </tr>
+<% end %>

@@ -51,7 +51,7 @@
 	   <% a.summary= " " %>
 	 <% end %>
       <details>
-       <summary><span class="badge"><%= a.cnt_match if a.cnt_match>0 %></span><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless a.source.avatar.blank? %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %></h6></div></summary>
+       <summary><span class="badge"><%= link_to_unless(a.cnt_match.zero?, a.cnt_match, addwindow_path(a), target: "blank"){} %></span><%= image_tag(a.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless a.source.avatar.blank? %> <%=  link_to a.title, nil, 'href' => a.ref , :target => "_blank" , title: a.summary %></h6></div></summary>
       
 
        <div class=inline><%= image_tag(a.image, class: 'avatar', :size => "200") unless a.image.blank? %> <%= markdown(a.summary) %></div>
@@ -73,32 +73,37 @@
 	  <td>
 
     
-	  <% if b.summary.blank? %>
-	 <% b.summary= " " %>
-	 <% end %>
+
+	 <% b.summary= " " if b.summary.blank? %>
+
 	 
        <details>
-       <summary><span class="badge"><%= b.cnt_match if b.cnt_match>0 %></span><%= image_tag(b.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless b.source.avatar.blank? %> <%=  link_to b.title, nil, 'href' => b.ref , :target => "_blank" , title: b.summary %> </h6></div></summary>
-        <%= image_tag(b.image, class: 'avatar2', :size => "200") unless b.image.blank?  %><%= markdown(b.summary) %>
+         <summary>
+         <% unless b.cnt_match.zero? %>
+             <span class="badge"><%= link_to  b.cnt_match, addwindow_path(b), target: "blank" %> </span>
+         <%end%>
+         <%= image_tag(b.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless b.source.avatar.blank? %> <%=  link_to b.title, nil, 'href' => b.ref , :target => "_blank" , title: b.summary %> </h6></div></summary>
+         <%= image_tag(b.image, class: 'avatar2', :size => "200") unless b.image.blank?  %><%= markdown(b.summary) %>
        </details>
       <% end %>
 	  </td>
 
 
      <% if c!=nil%>
-
-             <td> <h6><%= c.published.to_time().in_time_zone("Moscow").strftime("%R") %></h6></td>
-          <td>
-          <% if c.summary.blank? %>
-              <% c.summary= " " %>
-          <% end %>
-
-          <details>
-            <summary><span class="badge"><%= c.cnt_match if c.cnt_match>0 %></span><%= image_tag(c.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless c.source.avatar.blank? %> <%=  link_to c.title, nil, 'href' => c.ref , :target => "_blank" , title: c.summary %> </h6></div></summary>
-            <%= image_tag(c.image, class: 'avatar2', :size => "200") unless c.image.blank?  %><%= markdown(c.summary) %>
-          </details>
+       <td> <h6><%= c.published.to_time().in_time_zone("Moscow").strftime("%R") %></h6></td>
+       <td>
+         <% c.summary= " " if c.summary.blank? %>
+         <details>
+           <summary>
+                <% unless c.cnt_match.zero? %>
+                    <span class="badge"><%= link_to  c.cnt_match, addwindow_path(c), target: "blank" %> </span>
+                <%end%>
+                <%= image_tag(c.source.avatar.url(:thumb), class: 'avatar1', :size => "20") unless c.source.avatar.blank? %> <%=  link_to c.title, nil, 'href' => c.ref , :target => "_blank" , title: c.summary %> </h6></div></summary>
+              <%= image_tag(c.image, class: 'avatar2', :size => "200") unless c.image.blank?  %><%= markdown(c.summary) %>
+            </details>
       <% end %>
-          </td>
+      </td>
+
 
 
 
