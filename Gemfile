@@ -66,6 +66,7 @@ gem 'truncate_html'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
+gem 'sidekiq-status'
 gem 'telegram_bot'
 gem 'telegram-bot-ruby'
 gem "ruby-stemmer"
