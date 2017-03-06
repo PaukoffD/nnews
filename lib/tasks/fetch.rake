@@ -4,7 +4,6 @@ require 'lingua/stemmer'
 require 'matrix'
 #require 'bugsnag'
 
-
 task fetch: :environment do
  puts "RSS load" 
  source = Source.all
