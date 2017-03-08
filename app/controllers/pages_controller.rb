@@ -391,7 +391,7 @@ end
     end
     sources = Source.all
     FetchNewsWorker.perform_async(sources,28.minutes)
-    TagsWorker.perform_async(30.minutes)
+    #TagsWorker.perform_async(30.minutes)
     CategoryWorker.perform_async(62.minutes)
     InfodayWorker.perform_async(72.minutes)
     #PagematchWorker.perform_async(30.minutes)
