@@ -7,16 +7,7 @@
 
 <%= 	  %>
 
-<% @s.includes(:infos).each do |a| %>
- <h5> <%= image_tag(a.avatar.url(:thumb), class: 'avatar1', :size => "20") %>
- <%=  link_to a.name, pages_path(a.id) %>
-    |количество записей в базе: <%= a.infos.first.page_count %>
-	|  количество записей в базе за день: <%= a.infos.map.to_a[1].page_count %>
-	|  количество тегов за день: <%= a.infos.map.to_a[1].tag_count %>
-	|  количество записей в базе за прошлый день: <%= a.infos.map.to_a[2].page_count %>
-	|  количество тегов за день: <%= a.infos.map.to_a[2].tag_count %>
-	</h5>
-<% end %>
+
 
 
 

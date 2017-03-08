@@ -11,7 +11,7 @@ class InfosController < ApplicationController
     #@tags = ActsAsTaggableOn::Tag.all.count
     #@taggings = ActsAsTaggableOn::Tagging.all.count
     #@source = Source.all.count
-    @s = Source.all
+   # @s = Source.all
     #  @s.each do |source|
     #  pages_count = source.pages.all.count
     #  info=Info.new #if Info.find(source_id: source.id).nil?
