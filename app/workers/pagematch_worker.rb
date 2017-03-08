@@ -170,5 +170,3 @@ class PagematchWorker
     end
     end
   end
-
-end
