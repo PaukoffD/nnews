@@ -389,8 +389,8 @@ end
     else
       @pages = Page.nodup.order('published DESC').page(params[:page])
     end
-
-    FetchNewsWorker.perform_async(sources,5.minutes)
+    sources = Source.all
+    FetchNewsWorker.perform_async(sources,18.minutes)
     #loa
    @categories = Category.all.order('count DESC').limit(50)
    @search = Page.search(params[:q])
