@@ -18,6 +18,9 @@ class FetchNewsWorker
       rescue Feedjira::NoParserAvailable => e
         Rails.logger.error e.message
         next
+      rescue Faraday::TimeoutError => e
+        Rails.logger.error e.message
+        next
       end
       feed.entries.each do |entry|
         @p = Page.create(title: entry.title,
