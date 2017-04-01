@@ -213,8 +213,18 @@ class Dop
        url = s.ref
 
       #   @newest_entry = Page.order(published: :desc).where(source_id: s.id).first
+
+       conn = Faraday.new do |conn|
+         conn.request.options.timeout = 20
+       end
+       response = conn.get(url)
+       xml = response.body
+       #feed = Feedjira::Feed.parse xml
+
+
+
        begin
-        feed = Feedjira::Feed.fetch_and_parse url
+        feed = Feedjira::Feed.fetch_and_parse xml
 
 
         rescue Feedjira::FetchFailure => e
@@ -234,9 +244,9 @@ class Dop
                                 published: entry.published,
                                 ref: entry.url,
                                 source_id: s.id,
-                                summary: trunc_summary(entry.summary)
-                                )
-         lo
+                                summary:entry.summary)
+
+         #lo
          #@p.title = entry.title
           #@p.ref = entry.url
           #@p.time = entry.published.to_datetime

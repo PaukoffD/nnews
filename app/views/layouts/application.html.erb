@@ -38,6 +38,7 @@
               <%= yield %>
 
 			    <%= debug(params) if Rails.env.development? %>
+          <%= $cnt if Rails.env.development? %>
           </div>
 
 

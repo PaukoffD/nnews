@@ -1,11 +1,11 @@
 class FetchNewsWorker
   include Sidekiq::Worker
   include Sidekiq::Status::Worker # Important!
-  
-  
+
+  #$cnt=0
   def perform(sources,count)
     source = Source.all
-    $cnt=0
+
     cnt=0
     source.rss.each do |s|
       url = s.ref
@@ -55,7 +55,8 @@ class FetchNewsWorker
       @p.tag_list.add(@p.title, parse: true)
       @p.save
     end
-    $cnt=cnt
+    $redis.set('cnt', cnt)
+    #$cnt=cnt
   end
 end
 

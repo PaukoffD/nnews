@@ -7,8 +7,9 @@ class PagematchWorker
 
 
   def perform(count)
-    puts $cnt
-    @cnt=$cnt
+   # puts $cnt
+    @cnt= $redis.get('cnt')
+    puts @cnt
     ttags=[]
     tags=Tagexcept.all
     tags.each do |t|
@@ -17,7 +18,7 @@ class PagematchWorker
     pages = Page.order('created_at DESC').where(taggs: "").limit(@cnt)
     #binding.pry
     pages.each do |s|
-      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\']/, "").downcase.split-ttags, :language => "ru" )
+      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\'\-\`]/, "").downcase.split-ttags, :language => "ru" )
       s2=''
       for i in (0..s1.length-1) do
         break if i>2

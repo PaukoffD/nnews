@@ -24,6 +24,9 @@ class InfosController < ApplicationController
     #  end
     # end
       # loa
+    TlgrmWorker.perform_async(25.minutes)
+    TagsWorker.perform_async(30.minutes)
+    PagematchWorker.perform_async(30.minutes)
   end
 
     def infoday

@@ -8,7 +8,7 @@ class CategoryWorker
     @cats.each do |cat|
       cat.count=Page.where(category_id: cat.id).count
       cat.save
-      puts cat.name,cat.count
+     # puts cat.name,cat.count
     end
   end
 end

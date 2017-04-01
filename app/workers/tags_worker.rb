@@ -53,10 +53,10 @@ class TagsWorker
     end
     pages = Page.order('created_at DESC').where(taggs: "").limit(1000)
     pages.each do |s|
-      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"]/, "").downcase.split-ttags, :language => "ru" )
+      s1=Lingua.stemmer( s.title.gsub(/[\,\.\?\!\:\;\"\'\-\`]/, "").downcase.split-ttags, :language => "ru" )
 
       if s.taggs.blank?
-        for i in (0..2) do
+        for i in (0..s1.length-1) do
           s.taggs << s1[i]+" "
         end
         s.save
