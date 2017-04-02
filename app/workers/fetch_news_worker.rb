@@ -18,7 +18,7 @@ class FetchNewsWorker
       rescue Feedjira::NoParserAvailable => e
         Rails.logger.error e.message
         next
-      rescue Faraday::TimeoutError => e
+      rescue StandardError=>e
         Rails.logger.error e.message
         next
       end
