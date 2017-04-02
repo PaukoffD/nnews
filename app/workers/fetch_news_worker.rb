@@ -51,7 +51,7 @@ class FetchNewsWorker
         end
         #   puts "колво в фид  " ,cnt
       end
-      puts @p.title
+      #puts @p.title
       @p.save
       @p = Page.last
       ActsAsTaggableOn.delimiter = [' ', ',']
