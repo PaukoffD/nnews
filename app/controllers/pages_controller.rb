@@ -390,10 +390,10 @@ end
       @pages = Page.nodup.order('published DESC').page(params[:page])
     end
     sources = Source.all
-    FetchNewsWorker.perform_async(sources,28.minutes)
+    #FetchNewsWorker.perform_async(sources,28.minutes)
     #TagsWorker.perform_async(30.minutes)
-    CategoryWorker.perform_async(62.minutes)
-    InfodayWorker.perform_async(72.minutes)
+    #CategoryWorker.perform_async(62.minutes)
+    #InfodayWorker.perform_async(72.minutes)
     #PagematchWorker.perform_async(30.minutes)
     #TlgrmWorker.perform_async(25.minutes)
     #loa
